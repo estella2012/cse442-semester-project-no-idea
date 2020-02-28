@@ -1,10 +1,11 @@
-<!doctype html> 
+﻿<!doctype html> 
 <html lang="en"> 
-<head> 
+<head>
     <meta charset="UTF-8" />
     <title>Menu</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <script src="js/testScene.js"></script>
+    <script src="js/game1.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -29,7 +30,9 @@ var SceneA = new Phaser.Class({
 	    this.load.image('sky', 'assets/sky.png');// background image
 	    this.load.image('start', 'assets/start.png'); //start icon
 	    this.load.image('music', 'assets/music.png'); //music icon
-	    this.load.image('setting', 'assets/setting.png'); //setting icon
+        this.load.image('setting', 'assets/setting.png'); //setting icon
+
+        this.load.audio('theme', 'Music/mainMenu.mp3'); //Main menu audio
 	},
 
     create: function ()
@@ -52,7 +55,12 @@ var SceneA = new Phaser.Class({
 	    this.input.on('gameobjectover', function (pointer, gameObject) {gameObject.setTint(0x00FFFF);});
 
 	    this.input.on('gameobjectout', function (pointer, gameObject) {gameObject.clearTint();
-	    });
+        });
+
+        //Music
+        var theme = this.sound.add('theme');
+
+        theme.play({ loop: true });
 
 	    //	Clickable
 
@@ -75,6 +83,16 @@ var SceneA = new Phaser.Class({
         type: Phaser.AUTO,
         width: 800,
         height: 600,
+        physics: {
+           default: 'arcade',
+           arcade: {
+                gravity: { y: 0 },
+                debug: false
+           }
+        },
+        audio: {
+        disableWebAudio: true
+        },
         scene: [SceneA, SceneGame, SceneMusic]
     };
 
