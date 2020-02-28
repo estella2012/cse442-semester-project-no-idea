@@ -33,6 +33,10 @@
     this.load.image('lamp','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/lamp.png');
     
     this.load.image('photo','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/half_photo.png');
+    
+    this.load.image('player','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/c_v2.png');
+    
+    
         
     }
     function create ()
@@ -121,6 +125,25 @@
             
 
         }, this);
+        
+        
+        photo.setInteractive();
+        photo.on('pointerup', function () {
+         photo.data.values.time ++;
+            if(photo.data.values.time <=1){
+                text.setText([
+                           'This a photo, or half-of-photo.'
+                       ]);
+            }
+            
+            else{
+                text.setText([
+                    'Yeah. Maybe I should take it.'
+                ]);
+            }
+
+        }, this);
+        
      
        
     }
