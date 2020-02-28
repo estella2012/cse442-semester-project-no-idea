@@ -7,6 +7,7 @@
     <script type="module">
     import { Player } from "./player.js";
     import { Item } from "./item.js";
+    import { Door } from "./door.js";
 
     var config = {
         type: Phaser.AUTO,
@@ -29,6 +30,7 @@
     var playerObj = new Player();
     var goldKey = new Item('key_gold.png', 'Golden Key');
     var silverKey = new Item('key_silver.png', 'Silver Key');
+    var silverDoor = new Door();
     var game = new Phaser.Game(config);
 
     function preload ()
@@ -37,6 +39,7 @@
         playerObj.preload(this);
         goldKey.preload(this);
         silverKey.preload(this);
+        silverDoor.preload(this);
     }
 
     function create ()
@@ -46,6 +49,7 @@
         playerObj.create(100, 450, this);
         goldKey.create(150, 500, this, playerObj);
         silverKey.create(200, 500, this, playerObj);
+        silverDoor.create(250, 550, this, 'Silver Key', playerObj);
     }
 
     function update ()
