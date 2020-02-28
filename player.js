@@ -9,6 +9,7 @@ export class Player {
         this.self = game.physics.add.sprite(x, y, 'dude');
         this.self.setCollideWorldBounds(true);
         this.self.items = [];
+        this.self.inventory = game.add.text(16, 16, 'Inventory: Empty', { fontSize: '32px', fill: '#000' });
 
         game.anims.create({
             key: 'left',

@@ -22,6 +22,7 @@ export class Item {
 
     collect(player, item) {
         player.items.push(item.itemName);
+        player.inventory.setText('Inventory: ' + player.items);
         item.disableBody(true, true);
     }
 }
