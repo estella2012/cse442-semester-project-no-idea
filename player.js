@@ -1,14 +1,14 @@
 export class Player {
     self
-    items = []
     
     preload(game) {
-        game.load.spritesheet('dude', 'src/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+        game.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
 
     create(x, y, game) {
         this.self = game.physics.add.sprite(x, y, 'dude');
         this.self.setCollideWorldBounds(true);
+        this.self.items = [];
 
         game.anims.create({
             key: 'left',
@@ -63,9 +63,5 @@ export class Player {
         {
             this.self.setVelocityY(0);
         }
-    }
-
-    addItem(itemName) {
-        this.items.push(itemName);
     }
 }
