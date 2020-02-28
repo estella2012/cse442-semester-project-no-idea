@@ -13,6 +13,7 @@ var SceneGame = new Phaser.Class({
 
     preload: function () {
 
+        this.load.image('close', 'assets/close.png');
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('bomb', 'assets/bomb.png');
@@ -119,6 +120,11 @@ var SceneGame = new Phaser.Class({
 
         this.physics.add.overlap(player, stars, collectStar, null, this);
 
+        var close = this.load.image(60, 200, 'close').setScale(0.1).setInteractive();
+        close.on('pointerdown', function () {
+
+            this.scene.start('sceneA');
+        }, this);
     },
 
     update: function () {
