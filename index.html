@@ -6,6 +6,7 @@
 <body>
     <script type="module">
     import { Player } from "./player.js";
+    import { Item } from "./item.js";
 
     var config = {
         type: Phaser.AUTO,
@@ -26,21 +27,25 @@
 
     var cursors;
     var playerObj = new Player();
+    var goldKey = new Item('key_gold.png', 'Golden Key');
+    var silverKey = new Item('key_silver.png', 'Silver Key');
     var game = new Phaser.Game(config);
 
     function preload ()
     {
         this.load.image('sky', 'src/assets/sky.png');
-
         playerObj.preload(this);
+        goldKey.preload(this);
+        silverKey.preload(this);
     }
 
     function create ()
     {
         this.add.image(400, 300, 'sky');
-
         cursors = this.input.keyboard.createCursorKeys();
-        playerObj.create(100, 450, cursors, this);
+        playerObj.create(100, 450, this);
+        goldKey.create(150, 500, this);
+        silverKey.create(200, 500, this);
     }
 
     function update ()
