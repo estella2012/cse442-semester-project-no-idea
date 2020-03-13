@@ -2,12 +2,14 @@ export class Player {
     self
     
     preload(game) {
-        game.load.spritesheet('dude', 'src/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+        game.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
 
-    create(x, y, c, game) {
-        self = game.physics.add.sprite(x, y, 'dude');
-        self.setCollideWorldBounds(true);
+    create(x, y, game) {
+        this.self = game.physics.add.sprite(x, y, 'dude');
+        this.self.setCollideWorldBounds(true);
+        this.self.items = [];
+        this.self.inventory = game.add.text(16, 16, 'Inventory: Empty', { fontSize: '32px', fill: '#000' });
 
         game.anims.create({
             key: 'left',
@@ -33,34 +35,34 @@ export class Player {
     update(cursors) {
         if (cursors.left.isDown)
         {
-            self.setVelocityX(-160);
+            this.self.setVelocityX(-160);
 
-            self.anims.play('left', true);
+            this.self.anims.play('left', true);
         }
         else if (cursors.right.isDown)
         {
-            self.setVelocityX(160);
+            this.self.setVelocityX(160);
 
-            self.anims.play('right', true);
+            this.self.anims.play('right', true);
         }
         else
         {
-            self.setVelocityX(0);
+            this.self.setVelocityX(0);
 
-            self.anims.play('turn');
+            this.self.anims.play('turn');
         }
 
         if (cursors.up.isDown)
         {
-            self.setVelocityY(-160);
+            this.self.setVelocityY(-160);
         }
         else if (cursors.down.isDown)
         {
-            self.setVelocityY(160);
+            this.self.setVelocityY(160);
         }
         else
         {
-            self.setVelocityY(0);
+            this.self.setVelocityY(0);
         }
     }
 }

@@ -1,52 +1,22 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-<head>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-</head>
-<body>
-    <script type="module">
-    import { Player } from "./player.js";
-
-    var config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: false
-            }
-        },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
+    <head>
+        <meta charset="UTF-8">
+        <title>Turn Based RPG</title>        
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+        <script src="js/phaser.min.js"></script>                
+        <script src="js/world.js"></script>       
+        <script src="js/battle.js"></script>
+        <script src="js/start.js"></script>
+        <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
         }
-    };
-
-    var cursors;
-    var playerObj = new Player();
-    var game = new Phaser.Game(config);
-
-    function preload ()
-    {
-        this.load.image('sky', 'src/assets/sky.png');
-
-        playerObj.preload(this);
-    }
-
-    function create ()
-    {
-        this.add.image(400, 300, 'sky');
-
-        cursors = this.input.keyboard.createCursorKeys();
-        playerObj.create(100, 450, cursors, this);
-    }
-
-    function update ()
-    {
-        playerObj.update(cursors);
-    }
-    </script>
-</body>
+    </style>
+    </head>
+    <body>
+        <div id="content" style="display: block; width: 100%; text-align: center"></div>
+    </body>
 </html>
