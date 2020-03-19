@@ -1,5 +1,5 @@
-import { Player } from "../../player.js";
-import { GoldKey, SilverKey, SilverDoor } from "../../item.js";
+import { Player } from "../game-objects/player.js";
+import { GoldKey, SilverKey, SilverDoor } from "../game-objects/item.js";
 
 export class Level1Scene extends Phaser.Scene {
     constructor() {

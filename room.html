@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+<body>
+
+    <script>
+   var config = {
+       type: Phaser.AUTO,
+       width: 800,
+       height: 600,
+       physics: {
+           default: 'arcade',
+           arcade: {
+               gravity: { y: 200 }
+           }
+       },
+       scene: {
+           preload: preload,
+           create: create
+       }
+   };
+    var game = new Phaser.Game(config);
+    function preload ()
+    {
+        this.load.image('room', 'https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/room_b.png');
+        
+    this.load.image('bed','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/bed.png');
+        
+    this.load.image('table','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/table.png');
+        
+    this.load.image('lamp','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/lamp.png');
+    
+    this.load.image('photo','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/half_photo.png');
+    
+    this.load.image('player','https://raw.githubusercontent.com/cse442-spring-2020-offering/cse442-semester-project-no-idea/master/images/c_v2.png');
+    
+    
+        
+    }
+    function create ()
+    {
+        this.add.image(400, 300, 'room');
+        
+        var bed = this.add.image(446,262 , 'bed');
+        //this.add.image(446,262 , 'bed');
+        var table = this.add.image(397,250 , 'table');
+        //this.add.image(397,250 , 'table');
+        var lamp = this.add.image(380,235 , 'lamp');
+        //this.add.image(380,235 , 'lamp');
+        var photo = this.add.image(420,240, 'photo');
+        
+        var text = this.add.text(20, 450, 'This is my room', { font: '12px Courier', fill: '#00ff00' });
+        bed.setDataEnabled();
+        table.setDataEnabled();
+        lamp.setDataEnabled();
+        photo.setDataEnabled();
+        
+        bed.data.set('time', 0);
+        table.data.set('time', 0);
+        lamp.data.set('time', 0);
+        photo.data.set('time', 0);
+        
+        bed.setInteractive();
+        bed.on('pointerup', function () {
+         bed.data.values.time ++;
+            if(bed.data.values.time <=1){
+                text.setText([
+                           'This my bed.'
+                       ]);
+            }
+            
+            else{
+                text.setText([
+                    'There is nothing special about this bed.'
+                ]);
+            }
+
+        }, this);
+        
+        
+        lamp.setInteractive();
+        lamp.on('pointerdown', function () {
+                lamp.data.values.time ++;
+                if(lamp.data.values.time <=1){
+                    text.setText([
+                               'This my lamp. I know it looks like an egg.'
+                           ]);
+                }
+                else if(lamp.data.values.time ==2){
+                    text.setText([
+                        'I think it\'s really cute.'
+                    ]);
+                }
+                else{
+                    text.setText([
+                        'It\'s impossible to carry it with me, you know that, right?'
+                    ]);
+                }
+           
+
+        }, this);
+        
+        
+        table.setInteractive();
+        table.on('pointerdown', function () {
+           
+           table.data.values.time ++;
+                 if(table.data.values.time <=1){
+                     text.setText([
+                                'This a desk...'
+                            ]);
+                 }
+                 else if(table.data.values.time ==2){
+                     text.setText([
+                         'It is really old desk.'
+                     ]);
+                 }
+                 else{
+                     text.setText([
+                         'I wish I could have a chair.'
+                     ]);
+                 }
+            
+
+        }, this);
+        
+        
+        photo.setInteractive();
+        photo.on('pointerup', function () {
+         photo.data.values.time ++;
+            if(photo.data.values.time <=1){
+                text.setText([
+                           'This a photo, or half-photo.'
+                       ]);
+            }
+            
+            else{
+                text.setText([
+                    'Yeah. Maybe I should take it. ：)'
+                ]);
+            }
+
+        }, this);
+        
+     
+       
+    }
+    </script>
+
+</body>
+</html>
