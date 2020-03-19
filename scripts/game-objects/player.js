@@ -2,7 +2,7 @@ export class Player {
     self
     
     preload(game) {
-        game.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+        game.load.spritesheet('dude', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
 
     create(x, y, game) {
