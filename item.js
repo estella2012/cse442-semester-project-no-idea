@@ -1,28 +1,32 @@
-export class Item {
-    self
-    spriteName
-    itemName
-    playerObj
+export class GoldKey extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.size = 'sm';
+        this.identifier = 'gold_key';
+        this.setTexture('key_gold');
+    }
+}
 
-    constructor(sprite, item) {
-        this.spriteName = sprite;
-        this.itemName = item;
+export class SilverKey extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.size = 'sm';
+        this.identifier = 'silver_key';
+        this.setTexture('key_silver');
+    }
+}
+
+export class SilverDoor extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.requiredItem = 'silver_key';
+        this.closed = true;
+        this.anims.play('door_closed', true);
     }
 
-    preload(game) {
-        game.load.image(this.itemName, 'assets/' + this.spriteName);
-    }
-
-    create(x, y, game, player) {
-        this.self = game.physics.add.image(x, y, this.itemName);
-        this.self.itemName = this.itemName;
-        this.playerObj = player;
-        game.physics.add.collider(player.self, this.self, this.collect)
-    }
-
-    collect(player, item) {
-        player.items.push(item.itemName);
-        player.inventory.setText('Inventory: ' + player.items);
-        item.disableBody(true, true);
+    open() {
+        this.closed = false;
+        this.anims.play('door_open', true);               
+        this.body.checkCollision.none = true;
     }
 }
