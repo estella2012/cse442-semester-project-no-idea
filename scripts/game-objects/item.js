@@ -23,7 +23,7 @@ export class Lamp extends Phaser.GameObjects.Sprite {
 export class HalfPicture extends Phaser.GameObjects.Sprite {
     constructor(x, y, text, scene) {
         super(scene, x, y);
-        this.setTexture('halfPicture');
+        this.setTexture('half_picture');
 
         this.setInteractive();
         this.setDataEnabled();
