@@ -1,5 +1,5 @@
 import { Player } from "../game-objects/player.js";
-import { WoodTable, Lamp, Bed, GoldKey, SilverKey, SilverDoor } from "../game-objects/item.js";
+import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, SilverDoor } from "../game-objects/item.js";
 
 export class Level1Scene extends Phaser.Scene {
     constructor() {
@@ -22,6 +22,11 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
+        Phaser.GameObjects.GameObjectFactory.register('halfPicture', function(x, y, text) {
+            var sprite = new HalfPicture(x, y, text, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
         Phaser.GameObjects.GameObjectFactory.register('woodTable', function(x, y, text) {
             var sprite = new WoodTable(x, y, text, this.scene);
             this.displayList.add(sprite);
@@ -29,6 +34,11 @@ export class Level1Scene extends Phaser.Scene {
         });
         Phaser.GameObjects.GameObjectFactory.register('bed', function(x, y, text) {
             var sprite = new Bed(x, y, text, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
+        Phaser.GameObjects.GameObjectFactory.register('bomb', function(x, y) {
+            var sprite = new Bomb(x, y, this.scene);
             this.displayList.add(sprite);
             return sprite;
         });
@@ -56,9 +66,11 @@ export class Level1Scene extends Phaser.Scene {
 
         this.load.image('key_silver', 'assets/items/key_silver.png');
         this.load.image('key_gold', 'assets/items/key_gold.png');
-        this.load.image('bed', 'assets/room-objects/bed.png'); 
+        this.load.image('bomb', 'assets/items/bomb.png');
+        this.load.image('bed', 'assets/room-objects/bed.png');
         this.load.image('table','assets/room-objects/table_wood.png');   
         this.load.image('lamp','assets/room-objects/lamp.png');
+        this.load.image('halfPicture', 'assets/room-objects/half_photo.png');
     }
 
     create() {
@@ -70,14 +82,17 @@ export class Level1Scene extends Phaser.Scene {
         this.add.bed(446, 262, text);
         this.add.woodTable(397, 250, text);
         this.add.lamp(380, 235, text);
+        this.add.halfPicture(420, 240, text);
 
         var player = this.physics.add.existing(this.add.player(400, 300));
         var sk = this.physics.add.existing(this.add.silverKey(350, 280), 1);
         var gk = this.physics.add.existing(this.add.goldKey(350, 300), 1);
         var sDoor = this.physics.add.existing(this.add.silverDoor(400, 500), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(350, 320), 1);
 
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
+        this.physics.add.collider(player, bomb, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, sDoor, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
     }
 

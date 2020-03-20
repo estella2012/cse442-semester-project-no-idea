@@ -20,6 +20,26 @@ export class Lamp extends Phaser.GameObjects.Sprite {
     }
 }
 
+export class HalfPicture extends Phaser.GameObjects.Sprite {
+    constructor(x, y, text, scene) {
+        super(scene, x, y);
+        this.setTexture('halfPicture');
+
+        this.setInteractive();
+        this.setDataEnabled();
+        this.data.set('time', 0);
+
+        this.on('pointerup', function () {
+            this.data.values.time ++;
+            if(this.data.values.time <=1) {
+                text.setText(['This a photo, or half-photo.']);
+            } else { 
+                text.setText(['Yeah. Maybe I should take it. :)']); 
+            }
+        }, this);
+    }
+}
+
 export class Bed extends Phaser.GameObjects.Sprite {
     constructor(x, y, text, scene) {
         super(scene, x, y);
@@ -59,6 +79,15 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
                 text.setText(['I wish I could have a chair.']);
             }
         }, this);
+    }
+}
+
+export class Bomb extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.size = 'sm';
+        this.identifier = 'bomb';
+        this.setTexture('bomb');
     }
 }
 
