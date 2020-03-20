@@ -1,66 +1,28 @@
-export class Player {
-    self
-    
-    preload(game) {
-        game.load.spritesheet('dude', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
+export class Player extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.cursors = this.scene.input.keyboard.createCursorKeys();
+        this.setTexture('player');
     }
 
-    create(x, y, game) {
-        this.self = game.physics.add.sprite(x, y, 'dude');
-        this.self.setCollideWorldBounds(true);
-
-        game.anims.create({
-            key: 'left',
-            frames: game.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
-            frameRate: 10,
-            repeat:  -1
-        });
-
-        game.anims.create({
-            key: 'turn',
-            frames: [ { key: 'dude', frame: 4 } ],
-            frameRate: 20
-        });
-
-        game.anims.create({
-            key: 'right',
-            frames: game.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
-            frameRate: 10,
-            repeat:  -1
-        });
-    }
-
-    update(cursors) {
-        if (cursors.left.isDown)
-        {
-            this.self.setVelocityX(-160);
-
-            this.self.anims.play('left', true);
-        }
-        else if (cursors.right.isDown)
-        {
-            this.self.setVelocityX(160);
-
-            this.self.anims.play('right', true);
-        }
-        else
-        {
-            this.self.setVelocityX(0);
-
-            this.self.anims.play('turn');
+    preUpdate() {
+        if (this.cursors.left.isDown) {
+            this.body.setVelocityX(-160);
+            this.anims.play('player-left', true);
+        } else if (this.cursors.right.isDown) {
+            this.body.setVelocityX(160);
+            this.anims.play('player-right', true);
+        } else {
+            this.body.setVelocityX(0);
+            this.anims.play('player-turn');
         }
 
-        if (cursors.up.isDown)
-        {
-            this.self.setVelocityY(-160);
-        }
-        else if (cursors.down.isDown)
-        {
-            this.self.setVelocityY(160);
-        }
-        else
-        {
-            this.self.setVelocityY(0);
+        if (this.cursors.up.isDown) {
+            this.body.setVelocityY(-160);
+        } else if (this.cursors.down.isDown) {
+            this.body.setVelocityY(160);
+        } else {
+            this.body.setVelocityY(0);
         }
     }
 }
