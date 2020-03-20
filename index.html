@@ -1,61 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-</head>
-<body>
-    <script type="module">
-    import { Player } from "./player.js";
-    import { Item } from "./item.js";
-    import { Door } from "./door.js";
+    <head>
+        <script src="./scripts/phaser/phaser-arcade-physics.min.js"></script>
+    </head>
 
-    var config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: false
-            }
-        },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
-    };
+    <body style="padding: 0; margin: 0; background-color: #000000;">
+        <script type="module">
+            import { MainMenuScene } from "./scripts/scenes/main-menu-scene.js";
+            import { MusicScene } from "./scripts/scenes/music-scene.js";
+            import { InventoryScene } from "./scripts/scenes/inventory-scene.js";
+            import { Level1Scene } from "./scripts/scenes/level-1-scene.js";
 
-    var cursors;
-    var playerObj = new Player();
-    var goldKey = new Item('key_gold.png', 'Golden Key');
-    var silverKey = new Item('key_silver.png', 'Silver Key');
-    var silverDoor = new Door();
-    var game = new Phaser.Game(config);
+            var mainMenuScene = new MainMenuScene();
+            var musicScene = new MusicScene();
+            var inventoryScene = new InventoryScene();
+            var level1Scene = new Level1Scene();
 
-    function preload ()
-    {
-        this.load.image('sky', 'assets/sky.png');
-        playerObj.preload(this);
-        goldKey.preload(this);
-        silverKey.preload(this);
-        silverDoor.preload(this);
-    }
+            var config = {
+                type: Phaser.AUTO,
+                backgroundColor: '#000000',
+                scale: {
+                    mode: Phaser.Scale.FIT,
+                    autoCenter: Phaser.Scale.CENTER_BOTH,
+                    width: 800,
+                height: 600
+                },
+                physics: {
+                    default: 'arcade',
+                    arcade: {
+                        debug: false
+                    }
+                },
+                scene: [ mainMenuScene, musicScene, inventoryScene, level1Scene ]
+            };
 
-    function create ()
-    {
-        this.add.image(400, 300, 'sky');
-        cursors = this.input.keyboard.createCursorKeys();
-        playerObj.create(100, 450, this);
-        goldKey.create(150, 500, this, playerObj);
-        silverKey.create(200, 500, this, playerObj);
-        silverDoor.create(250, 550, this, 'Silver Key', playerObj);
-    }
-
-    function update ()
-    {
-        playerObj.update(cursors);
-    }
-    </script>
-</body>
+            var game = new Phaser.Game(config);
+        </script>
+    </body>
 </html>
