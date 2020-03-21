@@ -1,4 +1,5 @@
 import { Player } from "../game-objects/player.js";
+import { PatrolGuard } from "../game-objects/patrol_guard.js";
 import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, SilverDoor } from "../game-objects/item.js";
 
 export class Level1Scene extends Phaser.Scene {
@@ -12,6 +13,13 @@ export class Level1Scene extends Phaser.Scene {
 
         Phaser.GameObjects.GameObjectFactory.register('player', function(x, y) {
             var sprite = new Player(x, y, this.scene);
+            this.displayList.add(sprite);
+            this.updateList.add(sprite);
+
+            return sprite;
+        });
+        Phaser.GameObjects.GameObjectFactory.register('patrolGuard', function(x, y, w, h) {
+            var sprite = new PatrolGuard(x, y, w, h, this.scene);
             this.displayList.add(sprite);
             this.updateList.add(sprite);
 
@@ -64,6 +72,8 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('hallway', 'assets/rooms/hallway.png');
         this.load.image('dining_room', 'assets/rooms/dining_room.png');
 
+        this.load.image('patrol_guard', 'assets/characters/npc/guard.png');
+
         this.load.spritesheet('door', 'assets/room-objects/door.png', { frameWidth: 32, frameHeight: 48 });
         this.load.spritesheet('player', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
 
@@ -83,6 +93,8 @@ export class Level1Scene extends Phaser.Scene {
         this.add.image(592, 300, 'cell');
         this.add.image(528, 412, 'hallway');
         this.add.image(528, 684, 'dining_room');
+
+        this.add.patrolGuard(528, 684, 150, 150);
 
         this.add.bed(446, 262, text);
         this.add.woodTable(397, 250, text);
