@@ -96,10 +96,15 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('table','assets/room-objects/table_wood.png');   
         this.load.image('lamp','assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
+        this.load.image('map', 'assets/rooms/whole_map.png');
+        
     }
 
     create() {
         this.createAnims();
+
+        // this.add.image(1870,552, 'map')
+        // this.add.patrolGuard(128, 410, 400, 10);
 
         this.add.image(528, 412, 'hallway');
         this.add.image(208, 300, 'cell');
@@ -116,6 +121,7 @@ export class Level1Scene extends Phaser.Scene {
         this.add.halfPicture(420, 240, text);
 
         var player = this.physics.add.existing(this.add.player(400, 300));
+
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
@@ -123,6 +129,9 @@ export class Level1Scene extends Phaser.Scene {
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
         var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
         var cDoor3 = this.physics.add.existing(this.add.cellDoor(588, 385), 1);
+
+        var guard1 = this.physics.add.existing(this.add.patrolGuard(360, 650, 300, 40));
+        var guard2 = this.physics.add.existing(this.add.patrolGuard(128, 390, 600, 50));
 
         //Walls
 
@@ -139,9 +148,6 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, cDoor3, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
 
         //Walls
-
-        var guard1 = this.physics.add.existing(this.add.patrolGuard(360, 650, 300, 40));
-        var guard2 = this.physics.add.existing(this.add.patrolGuard(128, 390, 600, 50));
 
         //Guards
         this.physics.add.collider(player, guard1, guard1.gameOver, undefined, this);
