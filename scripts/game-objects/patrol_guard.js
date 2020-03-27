@@ -16,4 +16,13 @@ export class PatrolGuard extends Phaser.GameObjects.PathFollower {
             verticalAdjust: true
         });
     }
+
+    gameOver (player, guard)
+    {
+        player.setTint(0xff0000);
+        player.anims.play('player-turn');
+        this.scene.pause('Level1Scene');
+        this.scene.stop('InventoryScene');
+        this.scene.launch('GameOverScene');
+    }
 }

@@ -145,12 +145,12 @@ export class CellDoor2 extends Phaser.GameObjects.Sprite {
         super(scene, x, y);
         this.requiredItem = 'gold_key';
         this.closed = true;
-        this.anims.play('celldoor2_closed', true);
+        this.anims.play('celldoor_closed', true);
     }
 
     open() {
         this.closed = false;
-        this.anims.play('celldoor2_open', true);
+        this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
     }
 }
