@@ -42,8 +42,11 @@ DialogModalPlugin.prototype = {
     this.windowAlpha = opts.windowAlpha || 0.8;
     this.windowColor = opts.borderColor || 0x696969;
     this.windowHeight = opts.windowHeight || 150;
+	
     this.padding = opts.padding || 32;
     this.closeBtnColor = opts.closeBtnColor || 'WhiteSmoke';
+	
+
     this.dialogSpeed = opts.dialogSpeed || 3;
     this.eventCounter = 0;
     this.visible = true;
@@ -83,6 +86,27 @@ DialogModalPlugin.prototype = {
   },
 
   // Sets the text for the dialog window
+   setTextE: function (text, animate) {
+    // Reset the dialog
+    this.eventCounter = 0;
+    this.dialog = text.split('');
+    if (this.timedEvent) this.timedEvent.remove();
+
+    var tempText = animate ? '' : text;
+    this._setTextE(tempText);
+
+    if (animate) {
+      this.timedEvent = this.scene.time.addEvent({
+        delay: 150 - (this.dialogSpeed * 30),
+        callback: this._animateText,
+        callbackScope: this,
+        loop: true
+      });
+
+
+    }
+  },
+  
    setText: function (text, animate) {
     // Reset the dialog
     this.eventCounter = 0;
@@ -119,10 +143,30 @@ DialogModalPlugin.prototype = {
       y,
       text,
       style: {
+	   
         wordWrap: { width: this._getGameWidth() - (this.padding * 2) - 25 }
       }
     });
   },
+   _setTextE: function (text) {
+    // Reset the dialog
+    if (this.text) this.text.destroy();
+
+    var x = this.padding + 10;
+    var y = this._getGameHeight() - this.windowHeight - this.padding + 10;
+
+    this.text = this.scene.make.text({
+      x,
+      y,
+      text,
+      style: {
+	    font: 'bold 30px Arial',
+		fill: '#ff0044',
+        wordWrap: { width: this._getGameWidth() - (this.padding * 2) - 25 }
+      }
+    });
+  },
+
 
   // Creates the dialog window
   _createWindow: function () {
@@ -130,13 +174,12 @@ DialogModalPlugin.prototype = {
     var gameWidth = this._getGameWidth();
     var windowDimensions = this._calculateWindowDimensions(gameWidth, gameHeight);
     this.graphics = this.scene.add.graphics();
-
     this._createOuterWindow(windowDimensions);
     this._createInnerWindow(windowDimensions);
 	
 //	this.setText('try',true);
    
-    this._createCloseModalButton();
+   // this._createCloseModalButton();
 	
   },
 
@@ -177,6 +220,8 @@ DialogModalPlugin.prototype = {
   },
 
   // Creates the close dialog button border
+ 
+
   NEXTButton: function (text1) {
     var self2 = this;
     this.NEXT = this.scene.make.text({
@@ -190,16 +235,39 @@ DialogModalPlugin.prototype = {
       }
     });
 	this.NEXT.setInteractive();
-
 	this.NEXT.once('pointerdown', function () {
-
 	self2.setText(text1,true);
-
 	});
 
 	this.NEXT.once('pointerup',function(){
 	this.visible = !this.visible;
 	if (this.NEXT) this.NEXT.visible =!this.visible;
+
+	});
+  },
+
+  NEXTEndButton: function (text1) {
+    var self3 = this;
+    this.NEXT = this.scene.make.text({
+
+      x: this._getGameWidth() - this.padding -35,
+      y: this._getGameHeight()  - this.padding-20,
+      text: 'NEXT',
+      style: {
+        font: 'bold 12px Arial',
+        fill: this.closeBtnColor
+      }
+    });
+	this.NEXT.setInteractive();
+	this.NEXT.once('pointerdown', function () {
+	self3.setText(text1,true);
+	self3._createCloseModalButton();
+	});
+
+	this.NEXT.once('pointerup',function(){
+	this.visible = !this.visible;
+	if (this.NEXT) this.NEXT.visible =!this.visible;
+
 	});
 	
 
