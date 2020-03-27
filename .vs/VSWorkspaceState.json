@@ -1,8 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\js"
+    "\\assets",
+    "\\assets\\characters\\player",
+    "\\documentation",
+    "\\scripts",
+    "\\scripts\\game-objects",
+    "\\scripts\\phaser",
+    "\\scripts\\scenes"
   ],
-  "SelectedNode": "\\js",
+  "SelectedNode": "\\scripts\\phaser\\phaser.min.js",
   "PreviewInSolutionExplorer": false
 }

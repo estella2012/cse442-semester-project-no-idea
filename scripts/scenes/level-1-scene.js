@@ -1,6 +1,6 @@
 import { Player } from "../game-objects/player.js";
 import { PatrolGuard } from "../game-objects/patrol_guard.js";
-import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, SilverDoor } from "../game-objects/item.js";
+import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, SilverDoor, CellDoor, CellDoor2 } from "../game-objects/item.js";
 
 export class Level1Scene extends Phaser.Scene {
     constructor() {
@@ -65,6 +65,16 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
+        Phaser.GameObjects.GameObjectFactory.register('cellDoor', function (x, y) {
+            var sprite = new CellDoor(x, y, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
+        Phaser.GameObjects.GameObjectFactory.register('cellDoor2', function (x, y) {
+            var sprite = new CellDoor2(x, y, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
     }
 
     preload() {
@@ -75,6 +85,7 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('patrol_guard', 'assets/characters/npc/guard.png');
 
         this.load.spritesheet('door', 'assets/room-objects/door.png', { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet('celldoor', 'assets/room-objects/celldoor0.png', { frameWidth: 76, frameHeight: 21 });
         this.load.spritesheet('player', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
 
         this.load.image('key_silver', 'assets/items/key_silver.png');
@@ -88,13 +99,12 @@ export class Level1Scene extends Phaser.Scene {
 
     create() {
         this.createAnims();
+
         this.add.image(208, 300, 'cell');
         this.add.image(400, 300, 'cell');
         this.add.image(592, 300, 'cell');
         this.add.image(528, 412, 'hallway');
         this.add.image(528, 684, 'dining_room');
-
-        this.add.patrolGuard(528, 684, 150, 150);
 
         this.add.bed(446, 262, text);
         this.add.woodTable(397, 250, text);
@@ -102,32 +112,101 @@ export class Level1Scene extends Phaser.Scene {
         this.add.halfPicture(420, 240, text);
 
         var player = this.physics.add.existing(this.add.player(400, 300));
-        var sk = this.physics.add.existing(this.add.silverKey(350, 280), 1);
-        var gk = this.physics.add.existing(this.add.goldKey(350, 300), 1);
-        var sDoor = this.physics.add.existing(this.add.silverDoor(780, 436), 1);
-        var bomb = this.physics.add.existing(this.add.bomb(350, 320), 1);
+        var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
+        var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
 
+        var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
+        var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
+        var cDoor3 = this.physics.add.existing(this.add.cellDoor(588, 385), 1);
+        var sDoor = this.physics.add.existing(this.add.silverDoor(780, 436), 1);
+
+        //Walls
+
+        
+
+        /*
+         * Colliders
+         */
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, bomb, this.inventoryScene.collect, undefined, this.inventoryScene);
-        this.physics.add.collider(player, sDoor, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
+        //this.physics.add.collider(player, sDoor, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
+
+        //CellDoors
+        this.physics.add.collider(player, cDoor1, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
+        this.physics.add.collider(player, cDoor2, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
+        this.physics.add.collider(player, cDoor3, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
+
+        //Walls
+
+        this.add.patrolGuard(270, 542, 400, 300);
+
+        this.add.patrolGuard(128, 390, 600, 50);
+
+        // don't go out of the map
+/*        this.physics.world.bounds.x = 200;
+        this.physics.world.bounds.y = 0;
+        this.physics.world.bounds.width = cell1.width;
+        this.physics.world.bounds.height = cell1.height;*/
+        //this.creatCell1();
 
         var text = this.add.text(20, 450, 'This is my room', { font: '12px Courier', fill: '#00ff00' });
         text.setScrollFactor(0);
 
         this.cameras.main.startFollow(player);
     }
+/*
+    creatCell1() {
+        this.createAnims();
+
+        this.add.image(400, 300, 'cell');
+
+        this.add.bed(446, 262, text);
+        this.add.woodTable(397, 250, text);
+        this.add.lamp(380, 235, text);
+        this.add.halfPicture(420, 240, text);
+
+        var player = this.physics.add.existing(this.add.player(400, 300));
+        var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
+        var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
+        var sDoor = this.physics.add.existing(this.add.silverDoor(780, 436), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
+
+        this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
+        this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
+        this.physics.add.collider(player, bomb, this.inventoryScene.collect, undefined, this.inventoryScene);
+        this.physics.add.collider(player, sDoor, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
+    }*/
+
+    creatHallway() {
+        var hallway = this.add.image(528, 412, 'hallway');
+
+        this.add.patrolGuard(128, 390, 600, 50);
+    }
 
     createAnims() {
         this.anims.create({
-            key: 'door_closed',
-            frames: [ { key: 'door', frame: 0 } ],
+            key: 'celldoor2_closed',
+            frames: [ { key: 'celldoor', frame: 0 } ],
             frameRate: 10
         });
 
         this.anims.create({
-            key: 'door_open',
-            frames: [ { key: 'door', frame: 1 } ],
+            key: 'celldoor2_open',
+            frames: [ { key: 'celldoor', frame: 1 } ],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'celldoor_closed',
+            frames: [{ key: 'celldoor', frame: 0 }],
+            frameRate: 10
+        });
+
+        this.anims.create({
+            key: 'celldoor_open',
+            frames: [{ key: 'celldoor', frame: 1 }],
             frameRate: 20
         });
 
