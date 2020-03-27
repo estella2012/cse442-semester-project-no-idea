@@ -78,6 +78,8 @@ export class Level1Scene extends Phaser.Scene {
     }
 
     preload() {
+        this.load.plugin('DialogModalPlugin', 'scripts/dialog/dialog_plugin.js');
+
         this.load.image('cell', 'assets/rooms/cell.png');
         this.load.image('hallway', 'assets/rooms/hallway.png');
         this.load.image('dining_room', 'assets/rooms/dining_room.png');
