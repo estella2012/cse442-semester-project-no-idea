@@ -112,7 +112,7 @@ export class SilverKey extends Phaser.GameObjects.Sprite {
 export class SilverDoor extends Phaser.GameObjects.Sprite {
     constructor(x, y, scene) {
         super(scene, x, y);
-        this.requiredItem = 'silver_key';
+        this.requiredItem = 'gold_key';
         this.closed = true;
         this.anims.play('door_closed', true);
     }
@@ -120,6 +120,37 @@ export class SilverDoor extends Phaser.GameObjects.Sprite {
     open() {
         this.closed = false;
         this.anims.play('door_open', true);               
+        this.body.checkCollision.none = true;
+    }
+}
+
+export class CellDoor extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.requiredItem = 'silver_key';
+        this.closed = true;
+        this.anims.play('celldoor_closed', true);
+    }
+
+    open() {
+        this.closed = false;
+        this.anims.play('celldoor_open', true);
+        this.body.checkCollision.none = true;
+        
+    }
+}
+
+export class CellDoor2 extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.requiredItem = 'gold_key';
+        this.closed = true;
+        this.anims.play('celldoor_closed', true);
+    }
+
+    open() {
+        this.closed = false;
+        this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
     }
 }
