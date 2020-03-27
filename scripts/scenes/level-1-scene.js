@@ -82,7 +82,7 @@ export class Level1Scene extends Phaser.Scene {
 
         this.load.image('cell', 'assets/rooms/cell.png');
         this.load.image('hallway', 'assets/rooms/hallway.png');
-        this.load.image('dining_room', 'assets/rooms/dining_room.png');
+        this.load.image('dining_room', 'assets/rooms/dining_room_edited.png');
 
         this.load.image('patrol_guard', 'assets/characters/npc/guard.png');
 
