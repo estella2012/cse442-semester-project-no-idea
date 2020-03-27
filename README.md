@@ -19,5 +19,4 @@ Developers:
     - The only branch that should be merged into master should be develop
     - Do not perform merges with develop or master unless everyone has agreed to it first
 
-To install and run our project here are the steps required:
-1. _Fill this in as you work on your project_
+To play the current release version go to cse.buffalo.edu/~emerycom
