@@ -84,17 +84,15 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('table','assets/room-objects/table_wood.png');   
         this.load.image('lamp','assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
+        this.load.image('map', 'assets/rooms/whole_map.png');
+        
     }
 
     create() {
         this.createAnims();
-        this.add.image(208, 300, 'cell');
-        this.add.image(400, 300, 'cell');
-        this.add.image(592, 300, 'cell');
-        this.add.image(528, 412, 'hallway');
-        this.add.image(528, 684, 'dining_room');
+        this.add.image(1870,552, 'map')
 
-        this.add.patrolGuard(528, 684, 150, 150);
+        this.add.patrolGuard(128, 410, 400, 10);
 
         this.add.bed(446, 262, text);
         this.add.woodTable(397, 250, text);
@@ -104,7 +102,7 @@ export class Level1Scene extends Phaser.Scene {
         var player = this.physics.add.existing(this.add.player(400, 300));
         var sk = this.physics.add.existing(this.add.silverKey(350, 280), 1);
         var gk = this.physics.add.existing(this.add.goldKey(350, 300), 1);
-        var sDoor = this.physics.add.existing(this.add.silverDoor(780, 436), 1);
+        var sDoor = this.physics.add.existing(this.add.silverDoor(395, 370), 1);
         var bomb = this.physics.add.existing(this.add.bomb(350, 320), 1);
 
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
