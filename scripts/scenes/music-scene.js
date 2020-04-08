@@ -11,26 +11,26 @@ export class MusicScene extends Phaser.Scene {
     create() {
         this.add.image(400, 300, 'bg');
         this.add.text(300, 100, 'Music', {font: '64px Arial'});
-        
+
         var close = this.add.image(60, 470, 'close').setScale(0.15).setInteractive();
+        var onOff = this.add.text(308, 210, 'Mute: ON', {font: '32px Arial'}).setInteractive();
 
-	    var switchON = this.add.text(350, 200, 'ON',  {font: '32px Arial'}).setInteractive().setVisible(1);
-	    var switchOFF = this.add.text(350, 200, 'OFF', {font: '32px Arial'}).setInteractive().setVisible(0);
+        if (!this.sound.mute) {
+            onOff.setText('Mute: OFF');
+        }
 
-	    switchON.on('pointerdown', function(){
-	        switchON.setVisible(0);
-            switchOFF.setVisible(1);
-			//theme.setMute(false);
-	    });
-
-	    switchOFF.on('pointerdown', function(){
-	        switchON.setVisible(1);
-            switchOFF.setVisible(0);
-			//theme.setMute(true);
-	    });
+        onOff.on('pointerdown', function() {
+            this.sound.setMute(!this.sound.mute);
+            if (!this.sound.mute) {
+                onOff.setText('Mute: ON ');
+            } else {
+                onOff.setText('Mute: OFF');
+            }
+        }, this);
 	        
-	    close.on('pointerdown', function () {
-            this.scene.start('MainMenuScene');
+	    close.on('pointerdown', function() {
+            this.scene.stop()
+            this.scene.wake('MainMenuScene');
         }, this);
     }
 }
