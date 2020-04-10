@@ -97,6 +97,12 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('lamp','assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
         this.load.image('map', 'assets/rooms/whole_map.png');
+
+        this.load.image('cleft', 'assets/rooms/cleft.png');
+        this.load.image('cright', 'assets/rooms/cright.png');
+        this.load.image('ctop', 'assets/rooms/ctop.png');
+        this.load.image('cll', 'assets/rooms/cll.png');
+        this.load.image('clr', 'assets/rooms/clr.png');
         
     }
 
@@ -107,10 +113,26 @@ export class Level1Scene extends Phaser.Scene {
         // this.add.patrolGuard(128, 410, 400, 10);
 
         this.add.image(528, 412, 'hallway');
-        this.add.image(208, 300, 'cell');
-        this.add.image(400, 300, 'cell');
-        this.add.image(592, 300, 'cell');
+
+        var cell1 = this.add.image(208, 300, 'cell');
+        var cell2 = this.add.image(400, 300, 'cell');
+        var cell3 = this.add.image(592, 300, 'cell');
         this.add.image(528, 684, 'dining_room');
+
+        //Image for walls
+        var cleft1 = this.physics.add.image(208-cell1.width/2+17, 285, 'cleft').setImmovable(true);
+        var cright1 = this.physics.add.image(208 + cell1.width / 2 - 17, 284, 'cright').setImmovable(true);
+        var ctop1 = this.physics.add.image(208, 300 - cell1.height/2 + 17, 'ctop').setImmovable(true);
+        var cll1 = this.physics.add.image(208 - cell1.width / 2+27, 300 + cell1.height / 2 - 16, 'cll').setImmovable(true);
+        var clr1 = this.physics.add.image(208 + cell1.width / 2 - 27, 300 + cell1.height / 2 - 16, 'clr').setImmovable(true);
+
+        var cleft2 = this.physics.add.image(400 - cell1.width / 2 + 17, 285, 'cleft').setImmovable(true);
+        var cright2 = this.physics.add.image(400 + cell1.width / 2 - 17, 284, 'cright').setImmovable(true);
+        var ctop2 = this.physics.add.image(400, 300 - cell1.height / 2 + 17, 'ctop').setImmovable(true);
+        var cll2 = this.physics.add.image(400 - cell1.width / 2 + 27, 300 + cell1.height / 2 - 16, 'cll').setImmovable(true);
+        var clr2 = this.physics.add.image(400 + cell1.width / 2 - 27, 300 + cell1.height / 2 - 16, 'clr').setImmovable(true);
+
+        //var test = this.physics.add.image(208, 300, 'key_silver');
 
         var text = this.add.text(20, 450, 'This is my room', { font: '12px Courier', fill: '#00ff00' });
         text.setScrollFactor(0);
@@ -133,7 +155,7 @@ export class Level1Scene extends Phaser.Scene {
         var guard1 = this.physics.add.existing(this.add.patrolGuard(360, 650, 300, 40));
         var guard2 = this.physics.add.existing(this.add.patrolGuard(128, 390, 600, 50));
 
-        //Walls
+       
 
         /*
          * Colliders
@@ -147,19 +169,26 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, cDoor2, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
         this.physics.add.collider(player, cDoor3, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
 
-        //Walls
-
         //Guards
         this.physics.add.collider(player, guard1, guard1.gameOver, undefined, this);
         this.physics.add.collider(player, guard2, guard2.gameOver, undefined, this);
 
-        // don't go out of the map
-        /* this.physics.world.bounds.x = 200;
-        this.physics.world.bounds.y = 0;
-        this.physics.world.bounds.width = cell1.width;
-        this.physics.world.bounds.height = cell1.height; */
-        //this.creatCell1();
+        //Walls
 
+        //test.setImmovable(true);
+        this.physics.add.collider(player, cleft1);
+        this.physics.add.collider(player, cright1);
+        this.physics.add.collider(player, ctop1);
+        this.physics.add.collider(player, cll1);
+        this.physics.add.collider(player, clr1);
+
+        this.physics.add.collider(player, cleft2);
+        this.physics.add.collider(player, cright2);
+        this.physics.add.collider(player, ctop2);
+        this.physics.add.collider(player, cll2);
+        this.physics.add.collider(player, clr2);
+
+        //camera
         this.cameras.main.startFollow(player,);
     }
 

@@ -6,6 +6,10 @@ export class Player extends Phaser.GameObjects.Sprite {
     }
 
     preUpdate() {
+/*        var customBounds = new Phaser.Geom.Rectangle(208, 300, 200, 200);
+        this.setCollideWorldBounds(true);
+        this.body.setBoundsRectangle(customBounds);*/
+
         if (this.cursors.left.isDown) {
             this.body.setVelocityX(-160);
             this.anims.play('player-left', true);
