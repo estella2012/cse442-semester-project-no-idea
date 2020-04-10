@@ -122,7 +122,37 @@ export class Level1Scene extends Phaser.Scene {
         this.add.lamp(380, 235, text);
         this.add.halfPicture(420, 240, text);
 
-        var player = this.physics.add.existing(this.add.player(400, 300));
+        //bomb
+        var config = {
+            key: 'booom',
+            frames: this.anims.generateFrameNumbers('bom'),
+            frameRate: 18,
+
+            repeat: 0
+        };
+
+        var anim = this.anims.create(config);
+
+        
+
+        var sprite = this.add.sprite(400, 300, 'bom');
+        sprite.setInteractive();
+        sprite.setDataEnabled();
+        sprite.data.set('time', 0);
+
+        sprite.anims.load('booom');
+        this.input.keyboard.on('keydown_SPACE', function (event) {
+
+            sprite.data.values.time++;
+            if (sprite.data.values.time <= 1) {
+                sprite.anims.play('booom');
+            }
+
+
+        });
+        //bomb part ends
+
+       
 
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
@@ -163,22 +193,7 @@ export class Level1Scene extends Phaser.Scene {
         //this.creatCell1();
 
       
-        var config = {
-            key: 'booom',
-            frames: this.anims.generateFrameNumbers('bom'),
-            frameRate: 18,
-            
-            repeat: 0
-        };
-
-       var anim = this.anims.create(config);
-
-        var sprite = this.add.sprite(400, 300, 'bom');
-
-        sprite.anims.load('booom');
-        this.input.keyboard.on('keydown_SPACE', function (event) {
-            sprite.anims.play('booom');
-        });
+        
 
 
         this.cameras.main.startFollow(player,);
@@ -225,4 +240,3 @@ export class Level1Scene extends Phaser.Scene {
         });
     }
 }
-
