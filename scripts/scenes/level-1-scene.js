@@ -97,6 +97,8 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('lamp','assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
         this.load.image('map', 'assets/rooms/whole_map.png');
+        this.load.spritesheet('bom', 'assets/items/boom.png', { frameWidth: 60, frameHeight: 60 });
+
         
     }
 
@@ -160,6 +162,25 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.world.bounds.height = cell1.height; */
         //this.creatCell1();
 
+      
+        var config = {
+            key: 'booom',
+            frames: this.anims.generateFrameNumbers('bom'),
+            frameRate: 18,
+            
+            repeat: 0
+        };
+
+       var anim = this.anims.create(config);
+
+        var sprite = this.add.sprite(400, 300, 'bom');
+
+        sprite.anims.load('booom');
+        this.input.keyboard.on('keydown_SPACE', function (event) {
+            sprite.anims.play('booom');
+        });
+
+
         this.cameras.main.startFollow(player,);
     }
 
@@ -195,5 +216,13 @@ export class Level1Scene extends Phaser.Scene {
             frameRate: 10,
             repeat:  -1
         });
+        this.anims.create({
+            key: 'bm',
+            frames: this.anims.generateFrameNumbers('bom'),
+            frameRate: 18,
+
+            repeat: 0
+        });
     }
 }
+
