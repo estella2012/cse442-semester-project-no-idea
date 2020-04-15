@@ -1,0 +1,171 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>npc random patrol</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.22.0/dist/phaser.js"></script>
+    <script src="js/phaser.min.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+    var player = new Phaser.Class({
+        Extends: Phaser.GameObjects.Sprite
+        ,
+    });
+
+
+    var platforms;
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.image('sky', 'assets/_old-test-sprites/sky.png');
+        this.load.spritesheet('npc3', 'assets/_old-test-sprites/Guard.png', { frameWidth: 32, frameHeight: 32 });
+    }
+
+    function create ()
+    {
+
+        this.add.image(400, 300, 'sky');
+
+        platforms = this.physics.add.staticGroup();
+        guard = this.physics.add.sprite(300, 300, 'npc3');
+
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 4, end: 7 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'down',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'npc3', frame: 0 } ],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 5, end: 8 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'up',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 9, end: 12 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        var graphics = this.add.graphics();
+        // the path for our enemies
+        // parameters are the start x and y of our path
+       /* path = this.add.path(150, 150);
+        path.lineTo(300, 150);
+        path.lineTo(300, 300);
+        path.lineTo(150, 300);
+        path.lineTo(150, 150);
+
+        graphics.lineStyle(3, 0xffffff, 1);*/
+
+
+
+        //enemies =  this.add.follower(path, 0, 0, 'npc3'); // what is 0, 0
+
+
+
+        /*enemies.startFollow({
+            positionOnPath: true,
+            duration: 8000,
+
+            repeat: -1,
+            rotateToPath: false,
+            verticalAdjust: true
+        });*/
+
+        //moveEnemies();
+        //time event to make random enemy movement loop
+        timedEvent = this.time.addEvent({
+            delay: 1000,
+            callback: moveGuard,
+            callbackScope: this,
+            loop: true
+        });
+
+    }
+
+
+    function update (){
+
+    }
+    function moveGuard () {
+
+            const randNumber = Math.floor((Math.random() * 4) + 1);
+
+            switch(randNumber) {
+                case 1:
+                    guard.body.setVelocityX(50);
+                    guard.anims.play('up');
+
+                    break;
+                case 2:
+                    guard.body.setVelocityX(-50);
+                    guard.anims.play('down');
+
+
+                    break;
+                case 3:
+                    guard.body.setVelocityY(-50);
+                    guard.anims.play('right');
+
+                    break;
+                case 4:
+                    guard.body.setVelocityY(50);
+                    guard.anims.play('left');
+
+                    break;
+                default:
+                    guard.body.setVelocityX(0);
+                    guard.anims.play('turn');
+
+            }
+
+
+
+    }
+   
+   
+</script>
+
+</body>
+</html>
