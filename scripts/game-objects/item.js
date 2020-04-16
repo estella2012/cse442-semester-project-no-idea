@@ -83,11 +83,37 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
 }
 
 export class Bomb extends Phaser.GameObjects.Sprite {
+   
     constructor(x, y, scene) {
         super(scene, x, y);
         this.size = 'sm';
+        this.booms = false;
+        
         this.identifier = 'bomb';
         this.setTexture('bomb');
+
+        this.setInteractive();
+        this.setDataEnabled();
+        this.data.set('time', 0);
+
+
+        this.on('pointerdown', function () {
+           // this.data.values.time++;
+            //if (this.data.values.time <= 1) {
+            if (this.booms == false) {
+                
+                this.anims.play('bm');
+
+            }
+        }, this);
+
+
+    }
+
+
+    boom() {
+        this.booms = true;
+        this.anims.play('bm');
     }
 }
 
