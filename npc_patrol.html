@@ -1,0 +1,139 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>npc random patrol</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.22.0/dist/phaser.js"></script>
+    <script src="js/phaser.min.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+    var Clamp = Phaser.Math.Clamp;
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+    var player = new Phaser.Class({
+        Extends: Phaser.GameObjects.Sprite
+        ,
+    });
+
+
+    var platforms;
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.image('sky', 'assets/_old-test-sprites/sky.png');
+        this.load.spritesheet('npc3', 'assets/_old-test-sprites/Guard.png', { frameWidth: 32, frameHeight: 32 });
+    }
+
+    function create ()
+    {
+
+        this.add.image(400, 300, 'sky');
+        platforms = this.physics.add.staticGroup();
+
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 4, end: 7 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        this.anims.create({
+            key: 'down',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 0, end: 3 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'npc3', frame: 0 } ],
+            frameRate: 5
+        });
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 8, end: 11 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'up',
+            frames: this.anims.generateFrameNumbers('npc3', { start: 9, end: 11 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        var graphics = this.add.graphics();
+
+        // the path for our enemies
+        // parameters are the start x and y of our path
+       path = this.add.path(150, 150);
+        path.lineTo(300, 150);
+        path.lineTo(300, 300);
+        path.lineTo(150, 300);
+        path.lineTo(150, 150);
+
+        graphics.lineStyle(3, 0xffffff, 1);
+
+        path.draw(graphics);
+
+        //add patrolling
+        guard = this.add
+            .follower(path, 150, 150, "npc3")
+            .startFollow({
+                duration: 30000,
+                loop: -1
+            });
+
+
+
+    }
+
+
+    function update (){
+
+        if (!guard.isFollowing()) return;
+
+        // Approximate tangent
+        var t = guard.pathTween.getValue();
+        var p1 = path.getPoint(Clamp(t - 1e-6, 0, 1));
+        var p2 = path.getPoint(Clamp(t + 1e-6, 0, 1));
+        var dir = p2.clone().subtract(p1);
+
+        if (dir.x > 0) guard.anims.play("right", true);
+        else if (dir.x < 0) guard.anims.play("left", true);
+        else if (dir.y > 0) guard.anims.play("down", true);
+        else if (dir.y < 0) guard.anims.play("up", true);
+        else guard.anims.stop();
+
+
+    }
+
+
+</script>
+
+</body>
+</html>
