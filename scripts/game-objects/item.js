@@ -109,19 +109,20 @@ export class SilverKey extends Phaser.GameObjects.Sprite {
     }
 }
 
-export class SilverDoor extends Phaser.GameObjects.Sprite {
-    constructor(x, y, scene) {
+export class Door extends Phaser.GameObjects.Sprite {
+    constructor(x, y, image, scene) {
         super(scene, x, y);
         this.requiredItem = 'gold_key';
         this.closed = true;
-        this.anims.play('door_closed', true);
+        this.setTexture(image);
+        this.setPosition(x, y);
     }
-
+/*
     open() {
         this.closed = false;
         this.anims.play('door_open', true);               
         this.body.checkCollision.none = true;
-    }
+    }*/
 }
 
 export class CellDoor extends Phaser.GameObjects.Sprite {
