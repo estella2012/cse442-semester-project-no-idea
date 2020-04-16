@@ -72,4 +72,10 @@ export class InventoryScene extends Phaser.Scene {
             door.open();
         }
     }
+
+    tryBoom(player, bomb_) {
+        if (bomb_.booms && this.inventory.deleteItem(bomb_.requiredItem)) {
+            bomb_.boom();
+        }
+    }
 }
