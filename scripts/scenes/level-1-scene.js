@@ -130,6 +130,7 @@ export class Level1Scene extends Phaser.Scene {
 
 
         //bomb test start
+        // press space to exploed this bomb
         var config = {
             key: 'booom',
             frames: this.anims.generateFrameNumbers('bom'),
@@ -183,11 +184,6 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         // get matches
         this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
-        // get bomb
-        //this.physics.add.collider(player, bomb, this.inventoryScene.collect, undefined, this.inventoryScene);
-       
-        
-
         
 
         //CellDoors
@@ -195,7 +191,10 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, cDoor2, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
         this.physics.add.collider(player, cDoor3, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
 
+       
         this.physics.add.collider(player, bomb, this.inventoryScene.tryBoom, undefined, this.inventoryScene);
+        //get boom
+        //this.physics.add.collider(player, bomb, this.inventoryScene.collect, undefined, this.inventoryScene);
 
         //Walls
 

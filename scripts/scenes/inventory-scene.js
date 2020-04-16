@@ -74,8 +74,17 @@ export class InventoryScene extends Phaser.Scene {
     }
 
     tryBoom(player, bomb_) {
+
         if (bomb_.booms && this.inventory.deleteItem(bomb_.requiredItem)) {
             bomb_.boom();
+        }
+
+        else if (bomb_.booms && !this.inventory.deleteItem(bomb_.requiredItem)) {
+            bomb_.scene.children.remove(bomb_);
+            bomb_.scene = this;
+            this.children.add(bomb_);
+            this.inventory.addItem(bomb_);
+
         }
     }
 }

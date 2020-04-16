@@ -82,26 +82,26 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
     }
 }
 // fountion of boomb:
-// after get matches, player can blow up a bomb
-// In processing: place a bomb on the ground
+// - after get matches, player can blow up a bomb (complete)
+// - if have no matches, then pick up the bomb (complete)
+// - place a bomb on the ground (In processing)
 export class Bomb extends Phaser.GameObjects.Sprite {
     //booms = false;
     constructor(x, y, scene) {
         super(scene, x, y);
         this.size = 'sm';
         this.booms = true;
-        
+
         this.identifier = 'bomb';
         this.requiredItem = 'matches';
         this.setTexture('bomb');
-
-       
 
     }
 
 
     boom() {
         this.booms = false;
+        
         this.anims.play('bm');
     }
 
