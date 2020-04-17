@@ -4,8 +4,13 @@ export class GameOverScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(200, 200, 'Game Over', { fontSize: '64px', fill: '#0xff' });
-        this.add.text(100, 250, 'Click to Return To Main Menu', { fontSize: '32px', fill: '#000' });
+        this.background = this.add.graphics({x:100,y:100});
+        this.background.fillStyle('0x302C2E', 1);
+        this.background.fillRoundedRect(0,0,600,400,15);
+
+        this.add.bitmapText(200, 200, 'atari', "Game Over",'35');
+        this.add.bitmapText(140, 300, 'atari', "click to restart game",'20');
+
 
         this.input.on('pointerdown',() => {
             this.scene.stop('Level1Scene');
