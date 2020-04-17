@@ -1,6 +1,6 @@
 import { Player } from "../game-objects/player.js";
 import { PatrolGuard } from "../game-objects/patrol_guard.js";
-import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2 } from "../game-objects/item.js";
+import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches } from "../game-objects/item.js";
 import { CWall, DWall, HWall } from "../game-objects/wall.js";
 
 export class Level1Scene extends Phaser.Scene {
@@ -135,6 +135,8 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('hbtr', 'assets/rooms/hallway/hallway_btr.png');
         this.load.image('hdoorR', 'assets/rooms/dinning/dining_room_door_right.png');
 
+        this.load.image('matches_img', 'assets/items/matches.png');
+        this.load.spritesheet('bom', 'assets/items/boom.png', { frameWidth: 60, frameHeight: 60 });
     }
 
     create() {
@@ -147,6 +149,27 @@ export class Level1Scene extends Phaser.Scene {
         var cell2 = this.add.image(400, 300, 'cell');
         var cell3 = this.add.image(592, 300, 'cell');
         var dr = this.add.image(528, 684, 'dining_room');
+
+        var config = {
+            key: 'booom',
+            frames: this.anims.generateFrameNumbers('bom'),
+            frameRate: 18,
+            repeat: 0
+        };
+
+        var anim = this.anims.create(config);
+        var sprite = this.add.sprite(400, 300, 'bom');
+        sprite.setInteractive();
+        sprite.setDataEnabled();
+        sprite.data.set('time', 0);
+
+        sprite.anims.load('booom');
+        this.input.keyboard.on('keydown_SPACE', function (event) {
+            sprite.data.values.time++;
+            if (sprite.data.values.time <= 1) {
+                sprite.anims.play('booom');
+            }
+        });
 
         /*
          * Wall objects
@@ -204,8 +227,6 @@ export class Level1Scene extends Phaser.Scene {
 
         var guard1 = this.physics.add.existing(this.add.patrolGuard(360, 650, 300, 40));
         var guard2 = this.physics.add.existing(this.add.patrolGuard(128, 390, 600, 50));
-
-
 
         /*
          * Colliders
@@ -291,6 +312,14 @@ export class Level1Scene extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
             frameRate: 10,
             repeat: -1
+        });
+
+        this.anims.create({
+            key: 'bm',
+            frames: this.anims.generateFrameNumbers('bom', { start: 5, end: 8 }),
+            frameRate: 18,
+
+            repeat: 0
         });
     }
 }

@@ -86,8 +86,24 @@ export class Bomb extends Phaser.GameObjects.Sprite {
     constructor(x, y, scene) {
         super(scene, x, y);
         this.size = 'sm';
+        this.booms = true;
         this.identifier = 'bomb';
+        this.requiredItem = 'matches';
         this.setTexture('bomb');
+    }
+
+    boom() {
+        this.booms = false;
+        this.anims.play('bm');
+    }
+}
+
+export class Matches extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.size = 'sm';
+        this.identifier = 'matches';
+        this.setTexture('matches_img');
     }
 }
 
