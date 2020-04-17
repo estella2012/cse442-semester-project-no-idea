@@ -95,6 +95,7 @@ export class Level1Scene extends Phaser.Scene {
 
     preload() {
         this.load.plugin('DialogModalPlugin', 'scripts/dialog/dialog_plugin.js');
+        this.load.bitmapFont('atari', 'assets/font/carrier_command.png', 'assets/font/carrier_command.xml');
 
         this.load.image('cell', 'assets/rooms/cell/cell.png');
         this.load.image('hallway', 'assets/rooms/hallway/hallway.png');
