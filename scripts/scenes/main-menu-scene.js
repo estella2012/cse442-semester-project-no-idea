@@ -14,6 +14,16 @@ export class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
+        this.sound.stopAll();
+
+        for (var i = 0; i < this.sound.sounds.length; i++) {
+            if (this.sound.sounds[i].key === 'theme') {
+                this.sound.sounds.splice(i);
+                break;
+            }
+        }
+        this.sound.play('theme');
+
         this.add.image(400, 300, 'sky');
 
         var start = this.add.sprite(400, 300, 'start').setScale(0.5);
@@ -24,14 +34,14 @@ export class MainMenuScene extends Phaser.Scene {
 
     	var setting = this.add.sprite(750, 550, 'setting').setScale(0.3);
         setting.setInteractive(new Phaser.Geom.Circle(125, 125, 150), Phaser.Geom.Circle.Contains);
-
-        var theme = this.sound.add('theme');
-        theme.play({ loop: true });
         
         this.input.on('gameobjectover', function (pointer, gameObject) { gameObject.setTint(0x00FFFF); });
         this.input.on('gameobjectout', function (pointer, gameObject) { gameObject.clearTint(); });
 
-	    start.once('pointerdown', function () { this.scene.start('Level1Scene'); }, this);
-        music.once('pointerdown', function () { this.scene.launch('MusicScene'); }, this);
+	    start.on('pointerdown', function () { this.scene.start('Level1Scene'); }, this);
+        music.on('pointerdown', function () { 
+            this.scene.sleep();
+            this.scene.launch('MusicScene'); 
+        }, this);
     }
 }
