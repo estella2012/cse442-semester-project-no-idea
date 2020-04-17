@@ -95,6 +95,7 @@ export class Bomb extends Phaser.GameObjects.Sprite {
     boom() {
         this.booms = false;
         this.anims.play('bm', true);
+        this.body.checkCollision.none = true;
     }
 }
 
