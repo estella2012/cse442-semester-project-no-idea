@@ -89,12 +89,12 @@ export class Bomb extends Phaser.GameObjects.Sprite {
         this.booms = true;
         this.identifier = 'bomb';
         this.requiredItem = 'matches';
-        this.setTexture('bomb');
+        this.setTexture('bom');
     }
 
     boom() {
         this.booms = false;
-        this.anims.play('bm');
+        this.anims.play('bm', true);
     }
 }
 

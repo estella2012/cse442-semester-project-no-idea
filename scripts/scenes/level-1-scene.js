@@ -49,6 +49,7 @@ export class Level1Scene extends Phaser.Scene {
         Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y) {
             var sprite = new Bomb(x, y, this.scene);
             this.displayList.add(sprite);
+            this.updateList.add(sprite);
             return sprite;
         });
         Phaser.GameObjects.GameObjectFactory.register('silverKey', function (x, y) {
@@ -323,7 +324,7 @@ export class Level1Scene extends Phaser.Scene {
 
         this.anims.create({
             key: 'bm',
-            frames: this.anims.generateFrameNumbers('bom', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('bom', { start: 0, end: 9 }),
             frameRate: 18,
 
             repeat: 0
