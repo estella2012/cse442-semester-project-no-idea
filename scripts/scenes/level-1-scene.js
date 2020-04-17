@@ -91,6 +91,11 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
+        Phaser.GameObjects.GameObjectFactory.register('matches', function (x, y) {
+            var sprite = new Matches(x, y, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
     }
 
     preload() {
@@ -218,6 +223,7 @@ export class Level1Scene extends Phaser.Scene {
 
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
+        var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
         var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
 
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
@@ -233,7 +239,8 @@ export class Level1Scene extends Phaser.Scene {
          */
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
-        this.physics.add.collider(player, bomb, this.inventoryScene.collect, undefined, this.inventoryScene);
+        this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
+        this.physics.add.collider(player, bomb, this.inventoryScene.tryBoom, undefined, this.inventoryScene);
 
         //CellDoors
         this.physics.add.collider(player, cDoor1, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
