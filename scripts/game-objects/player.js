@@ -5,7 +5,8 @@ export class Player extends Phaser.GameObjects.Sprite {
         this.setTexture('player');
     }
 
-    preUpdate() {
+    preUpdate(time, delta) {
+        super.preUpdate(time, delta);
         if (this.cursors.left.isDown) {
             this.body.setVelocityX(-160);
             this.anims.play('player-left', true);

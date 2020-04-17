@@ -81,46 +81,31 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
         }, this);
     }
 }
-// fountion of boomb:
-// - after get matches, player can blow up a bomb (complete)
-// - if have no matches, then pick up the bomb (complete)
-// - place a bomb on the ground (In processing)
+
 export class Bomb extends Phaser.GameObjects.Sprite {
-    //booms = false;
     constructor(x, y, scene) {
         super(scene, x, y);
         this.size = 'sm';
         this.booms = true;
-
         this.identifier = 'bomb';
         this.requiredItem = 'matches';
-        this.setTexture('bomb');
-
+        this.setTexture('bom');
     }
-
 
     boom() {
         this.booms = false;
-        
-        this.anims.play('bm');
+        this.anims.play('bm', true);
+        this.body.checkCollision.none = true;
     }
-
-   
-
-
 }
 
-
 export class Matches extends Phaser.GameObjects.Sprite {
-
     constructor(x, y, scene) {
         super(scene, x, y);
         this.size = 'sm';
         this.identifier = 'matches';
         this.setTexture('matches_img');
     }
-
-
 }
 
 export class GoldKey extends Phaser.GameObjects.Sprite {
@@ -141,19 +126,20 @@ export class SilverKey extends Phaser.GameObjects.Sprite {
     }
 }
 
-export class SilverDoor extends Phaser.GameObjects.Sprite {
-    constructor(x, y, scene) {
+export class Door extends Phaser.GameObjects.Sprite {
+    constructor(x, y, image, scene) {
         super(scene, x, y);
         this.requiredItem = 'gold_key';
         this.closed = true;
-        this.anims.play('door_closed', true);
+        this.setTexture(image);
+        this.setPosition(x, y);
     }
-
+/*
     open() {
         this.closed = false;
         this.anims.play('door_open', true);               
         this.body.checkCollision.none = true;
-    }
+    }*/
 }
 
 export class CellDoor extends Phaser.GameObjects.Sprite {
