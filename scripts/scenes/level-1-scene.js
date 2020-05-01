@@ -120,6 +120,8 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('lamp', 'assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
         this.load.image('map', 'assets/rooms/whole_map.png');
+		this.load.image('l_table', 'assets/room-objects/table_wood_short.png');
+		this.load.image('iron_table', 'assets/room-objects/table_iron.png');
 
         this.load.image('cleft', 'assets/rooms/cell/cleft.png');
         this.load.image('cright', 'assets/rooms/cell/cright.png');
@@ -212,6 +214,23 @@ export class Level1Scene extends Phaser.Scene {
         var dtopr = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'topr', dr, 'dtopr'), 1);
         var dbt = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'bt', dr, 'dbt'), 1);
 
+		//dinner_tables
+		var table_group = this.physics.add.staticGroup();
+
+		for(var i = 0; i < 4; i++){
+			table_group.create(388 + 75*i, dr.y - 100, 'l_table');
+		}
+		for(var i = 0; i < 4; i++){
+			table_group.create(388 + 75*i, dr.y + 100, 'l_table');
+		}
+
+		var iron_group = this.physics.add.staticGroup();
+
+		for(var i = -1; i < 2; i+= 2){
+			iron_group.create(dr.x + 180, dr.y - 30 + 70*i, 'iron_table');
+		}
+		//var tables = this.physics.add.existing(table_group, 1);
+
         var text = this.add.text(20, 450, 'This is my room', { font: '12px Courier', fill: '#00ff00' });
         text.setScrollFactor(0);
 
@@ -284,6 +303,9 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, dtopl);
         this.physics.add.collider(player, dtopr);
         this.physics.add.collider(player, dbt);
+
+		this.physics.add.collider(player, table_group);
+		this.physics.add.collider(player, iron_group);
 
         //camera
         this.cameras.main.startFollow(player);
