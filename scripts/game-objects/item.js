@@ -92,7 +92,7 @@ export class Bomb extends Phaser.GameObjects.Sprite {
         this.setTexture('bom');
     }
 
-    boom() {
+    boom(player, bomb) {
         this.booms = false;
         this.anims.play('bm', true);
         this.body.checkCollision.none = true;
@@ -170,5 +170,12 @@ export class CellDoor2 extends Phaser.GameObjects.Sprite {
         this.closed = false;
         this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
+    }
+}
+
+export class BreakableWall extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.setTexture('wall_broken');
     }
 }

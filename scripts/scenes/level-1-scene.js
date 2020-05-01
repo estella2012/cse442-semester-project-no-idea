@@ -1,6 +1,6 @@
 import { Player } from "../game-objects/player.js";
 import { PatrolGuard } from "../game-objects/patrol_guard.js";
-import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches } from "../game-objects/item.js";
+import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches, BreakableWall } from "../game-objects/item.js";
 import { CWall, DWall, HWall } from "../game-objects/wall.js";
 
 export class Level1Scene extends Phaser.Scene {
@@ -97,6 +97,11 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
+        Phaser.GameObjects.GameObjectFactory.register('breakableWall', function (x, y) {
+            var sprite = new BreakableWall(x, y, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
     }
 
     preload() {
@@ -126,6 +131,7 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('ctop', 'assets/rooms/cell/ctop.png');
         this.load.image('cll', 'assets/rooms/cell/cll.png');
         this.load.image('clr', 'assets/rooms/cell/clr.png');
+        this.load.image('wall_broken', 'assets/rooms/cell/wallhole.png');
 
         this.load.image('dleft', 'assets/rooms/dinning/dining_room_left.png');
         this.load.image('drightb', 'assets/rooms/dinning/dining_room_right_bt.png');
@@ -225,7 +231,7 @@ export class Level1Scene extends Phaser.Scene {
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
-        var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(200, 224), 1);
 
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
         var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
@@ -241,7 +247,7 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
-        this.physics.add.collider(player, bomb, this.inventoryScene.tryBoom, undefined, this.inventoryScene);
+        this.physics.add.collider(player, bomb, bomb.boom, undefined, bomb);
 
         //CellDoors
         this.physics.add.collider(player, cDoor1, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
