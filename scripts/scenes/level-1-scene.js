@@ -6,6 +6,7 @@ import { CWall, DWall, HWall } from "../game-objects/wall.js";
 export class Level1Scene extends Phaser.Scene {
     constructor() {
         super('Level1Scene');
+		var text1;
     }
 
     init() {
@@ -143,6 +144,8 @@ export class Level1Scene extends Phaser.Scene {
 
         this.load.image('matches_img', 'assets/items/matches.png');
         this.load.spritesheet('bom', 'assets/items/boom.png', { frameWidth: 60, frameHeight: 60 });
+		this.load.image('NPC','assets/characters/npc/character_m_vip.png');
+       
     }
 
     create() {
@@ -223,6 +226,7 @@ export class Level1Scene extends Phaser.Scene {
         var player = this.physics.add.existing(this.add.player(400, 300));
 
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
+		 
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
         var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
@@ -239,6 +243,7 @@ export class Level1Scene extends Phaser.Scene {
          * Colliders
          */
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
+		
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, bomb, this.inventoryScene.tryBoom, undefined, this.inventoryScene);
@@ -284,10 +289,134 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, dtopl);
         this.physics.add.collider(player, dtopr);
         this.physics.add.collider(player, dbt);
+		var npc = this.add.sprite(450,310,'NPC');
+	    npc.setInteractive();
+		
+	    this.graphics = this.add.graphics();
+		this.graphics.lineStyle(1, 0xffffff);
+        this.graphics.fillStyle(0xffffff, 0.5); 
+		this.graphics.strokeRect(110, 530, 685, 70);
+		this.graphics.fillRect(110, 530, 685, 70);
+//		this.visible=!this.visible;
+//		this.graphics.visible = !this.visible;
+	    this.graphics.setScrollFactor(0);
+
+	
+
+		//dialog
+
+	    var textn = 0;
+		var text1 = this.add.text(120,550 , 'begin ', { font: '18px Courier', fill: '#000000' });
+		
+		text1.setScrollFactor(0);
+		
+		
+		
+	
+	 this.input.keyboard.on('keydown-A', function () {
+	        if( gk.textt==true && sk.textt==true && mat.textt==true){
+			    text1.text='Did\'t have any new item is picked';
+			}
+	         if(gk.textt==false && sk.textt==true && mat.textt== true){
+				text1.text='You get a gold key.';
+				gk.textt=true;
+			}
+			else if(mat.textt==false && gk.textt==true && sk.textt==true){
+				text1.text='You get a matches.';
+				mat.textt=true;
+			
+			}
+      
+            if(sk.textt==false && mat.textt==true && gk.textt==true){
+			   text1.text='You get a silver key.';
+			    
+				sk.textt=true;
+				
+	        }
+			if(mat.textt==false && gk.textt==true && sk.textt==false){
+				text1.text='You get a silver key and matches.';
+				sk.textt=true;
+				mat.textt=true;
+
+			}
+		   if(mat.textt==false && gk.textt==false && sk.textt==false){
+				text1.text='You get a silver key,gold key and matches.';
+				sk.textt=true;
+				mat.textt=true;
+				gk.textt=true;
+			}
+			if(mat.textt==false && gk.textt==false && sk.textt==true){
+				text1.text='You get a gold key and matches.';
+				mat.textt=true;
+				gk.textt=true;
+			}
+
+			if(mat.textt==true && gk.textt==false && sk.textt==false){
+				text1.text='You get a gold key and silver key.';
+				sk.textt=true;
+				gk.textt=true;
+			}
+			
+			
+			
+			//if(bomb.textt==true && mat.textt==true && gk.textt==true&& sk.textt=true){
+			//	text1.text='   ';
+			//}
+           }, this);
+		
+		
+        npc.on('pointerdown', function () {
+		  //this.inventoryScene.usebook('half_picture', textn);
+	      if(textn == 0){
+		       
+		      //this.graphics.visible=this.visible;
+		       text1.text ='Prisoner C:How can I get Crane\'s things back?';
+		       textn++;
+		  }
+		  
+		  else if(textn==1){
+		  	  text1.text=' Prisoner C:I just want to bring back his stuff,\n why there is no one to help us. ';
+			  textn++;
+		  }
+		  else if(textn==2){
+		  	
+		  	       textn++;
+				   text1.text='Player: !!!!!!!!!!!!!!';
+				 
+			
+		  }
+		 else  if(textn==3){
+			  	  text1.text=' But who can get these stuffs beside the guard? ';
+				  textn++;
+			  }
+	     else if(textn==4){
+			  	  text1.text='No one can go to others cell except for the guard. ';
+				  textn++;
+			  }
+	     else{
+		 	 text1.text='  ';
+		 }
+		  
+		  
+	         
+	  
+	      
+	    });
+
 
         //camera
         this.cameras.main.startFollow(player);
+
     }
+
+
+	collectitem (player, sk){
+    if(sk.textt==false){
+			   text1.text='You get a silver key.';
+			   sk.textt=true;
+	       }
+    }
+
 
     createAnims() {
         this.anims.create({
@@ -330,4 +459,8 @@ export class Level1Scene extends Phaser.Scene {
             repeat: 0
         });
     }
+
+
+	
+	
 }
