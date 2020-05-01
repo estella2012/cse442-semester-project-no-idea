@@ -16,7 +16,8 @@ export class MusicScene extends Phaser.Scene {
 
         var close = this.add.image(60, 470, 'close').setScale(0.15).setInteractive();
         var onOff = this.add.text(308, 210, 'Mute: ON', {font: '32px Arial'}).setInteractive();
-
+ 
+	    
         var volRate = 0.1;
         this.sound.volume = 0.5;
         var volumeText = this.add.text(308, 240, 'Volume: 50', {font: '32px Arial'});
