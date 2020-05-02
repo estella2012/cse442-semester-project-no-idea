@@ -115,7 +115,8 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('key_silver', 'assets/items/key_silver.png');
         this.load.image('key_gold', 'assets/items/key_gold.png');
         this.load.image('bomb', 'assets/items/bomb.png');
-        this.load.image('bed', 'assets/room-objects/bed.png');
+        this.load.image('cover', 'assets/room-objects/bed.png');
+        this.load.image('bed', 'assets/room-objects/beizi.png');
         this.load.image('table', 'assets/room-objects/table_wood.png');
         this.load.image('lamp', 'assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
@@ -215,12 +216,14 @@ export class Level1Scene extends Phaser.Scene {
         var text = this.add.text(20, 450, 'This is my room', { font: '12px Courier', fill: '#00ff00' });
         text.setScrollFactor(0);
 
-        this.add.bed(446, 262, text);
+        var bed = this.add.sprite(446, 262, 'cover');
+        
         this.add.woodTable(397, 250, text);
         this.add.lamp(380, 235, text);
         this.add.halfPicture(420, 240, text);
 
         var player = this.physics.add.existing(this.add.player(400, 300));
+        this.add.bed(446, 262, text);
 
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
