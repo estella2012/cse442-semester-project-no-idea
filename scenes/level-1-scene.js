@@ -243,6 +243,7 @@ export class Level1Scene extends Phaser.Scene {
          * Colliders
          */
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
+		this.physics.add.collider(player, sk, this.changetext, undefined, this.inventoryScene);
 		
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
@@ -301,7 +302,7 @@ export class Level1Scene extends Phaser.Scene {
 //		this.graphics.visible = !this.visible;
 	    this.graphics.setScrollFactor(0);
 
-	
+		
 
 		//dialog
 
@@ -314,54 +315,11 @@ export class Level1Scene extends Phaser.Scene {
 		
 	
 	 this.input.keyboard.on('keydown-A', function () {
-	        if( gk.textt==true && sk.textt==true && mat.textt==true){
-			    text1.text='Did\'t have any new item is picked';
-			}
-	         if(gk.textt==false && sk.textt==true && mat.textt== true){
-				text1.text='You get a gold key.';
-				gk.textt=true;
-			}
-			else if(mat.textt==false && gk.textt==true && sk.textt==true){
-				text1.text='You get a matches.';
-				mat.textt=true;
-			
-			}
+	        
       
-            if(sk.textt==false && mat.textt==true && gk.textt==true){
+            if(sk.textt==false){
 			   text1.text='You get a silver key.';
-			    
-				sk.textt=true;
-				
-	        }
-			if(mat.textt==false && gk.textt==true && sk.textt==false){
-				text1.text='You get a silver key and matches.';
-				sk.textt=true;
-				mat.textt=true;
-
-			}
-		   if(mat.textt==false && gk.textt==false && sk.textt==false){
-				text1.text='You get a silver key,gold key and matches.';
-				sk.textt=true;
-				mat.textt=true;
-				gk.textt=true;
-			}
-			if(mat.textt==false && gk.textt==false && sk.textt==true){
-				text1.text='You get a gold key and matches.';
-				mat.textt=true;
-				gk.textt=true;
-			}
-
-			if(mat.textt==true && gk.textt==false && sk.textt==false){
-				text1.text='You get a gold key and silver key.';
-				sk.textt=true;
-				gk.textt=true;
-			}
-			
-			
-			
-			//if(bomb.textt==true && mat.textt==true && gk.textt==true&& sk.textt=true){
-			//	text1.text='   ';
-			//}
+	       }
            }, this);
 		
 		
@@ -393,8 +351,8 @@ export class Level1Scene extends Phaser.Scene {
 			  	  text1.text='No one can go to others cell except for the guard. ';
 				  textn++;
 			  }
-	     else{
-		 	 text1.text='  ';
+	     else if(textn==5 &&sk.textt==false){
+		 	 text1.text='good';
 		 }
 		  
 		  
@@ -409,13 +367,6 @@ export class Level1Scene extends Phaser.Scene {
 
     }
 
-
-	collectitem (player, sk){
-    if(sk.textt==false){
-			   text1.text='You get a silver key.';
-			   sk.textt=true;
-	       }
-    }
 
 
     createAnims() {
@@ -460,7 +411,9 @@ export class Level1Scene extends Phaser.Scene {
         });
     }
 
-
+	changetext(player,item){
+	       text1.text='end';
+	}
 	
 	
 }
