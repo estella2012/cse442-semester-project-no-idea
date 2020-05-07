@@ -306,7 +306,7 @@ export class Level1Scene extends Phaser.Scene {
 		//dialog
 
 	    var textn = 0;
-		var text1 = this.add.text(120,550 , 'begin ', { font: '18px Courier', fill: '#000000' });
+		var text1 = this.add.text(120,550 , 'Press \'I\' to view the backpack,\npress \'A\' to view the latest picked item information.', { font: '18px Courier', fill: '#000000' });
 		
 		text1.setScrollFactor(0);
 		
@@ -314,8 +314,12 @@ export class Level1Scene extends Phaser.Scene {
 		
 	
 	 this.input.keyboard.on('keydown-A', function () {
+	      
 	        if( gk.textt==true && sk.textt==true && mat.textt==true){
-			    text1.text='Did\'t have any new item is picked';
+			
+			
+			  text1.text='Did\'t have any new item is picked';
+				
 			}
 	         if(gk.textt==false && sk.textt==true && mat.textt== true){
 				text1.text='You get a gold key.';
@@ -344,7 +348,10 @@ export class Level1Scene extends Phaser.Scene {
 				sk.textt=true;
 				mat.textt=true;
 				gk.textt=true;
+				
+
 			}
+		
 			if(mat.textt==false && gk.textt==false && sk.textt==true){
 				text1.text='You get a gold key and matches.';
 				mat.textt=true;
@@ -394,7 +401,7 @@ export class Level1Scene extends Phaser.Scene {
 				  textn++;
 			  }
 	     else{
-		 	 text1.text='  ';
+		 	 text1.text=' ';
 		 }
 		  
 		  
