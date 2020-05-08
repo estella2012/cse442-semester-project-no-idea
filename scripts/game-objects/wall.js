@@ -38,28 +38,28 @@ export class DWall extends Phaser.GameObjects.Sprite {
         var xM = x;
         var yM = y;
         if (pos == 'left') {
-            xM = x - room.width / 2 + 6;
+            xM = x - room.width / 2 + 16;
             yM = y;
         }
         if (pos == 'rightb') {
-            xM = x + room.width / 2 - 5;
-            yM = yM + 98;
+            xM = x + room.width / 2 - 15;
+            yM = yM ;
         }
         if (pos == 'rightt') {
-            xM = x + room.width / 2 - 5;
-            yM = y - 158;
+            xM = x + room.width / 2 - 15;
+            yM = y ;
         }
         if (pos == 'topl') {
-            xM = x - room.width / 2 + 24.5;
-            yM = y - room.height / 2 + 4;
+            xM = x - room.width / 2 + 24;
+            yM = y - room.height / 2 + 18;
         }
         if (pos == 'topr') {
-            xM = x + 40;
-            yM = y - room.height / 2 + 3.5;
+            xM = x + 32;
+            yM = y - room.height / 2 + 17;
         }
         if (pos == 'bt') {
             xM = x + 1
-            yM = y + room.height / 2 - 4;
+            yM = y + room.height / 2 - 16;
         }
         this.setTexture(image);
         this.requiredItem = image;
