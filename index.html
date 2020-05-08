@@ -11,12 +11,14 @@
             import { InventoryScene } from "./scripts/scenes/inventory-scene.js";
             import { Level1Scene } from "./scripts/scenes/level-1-scene.js";
             import { GameOverScene } from "./scripts/scenes/game-over-scene.js";
+            import { LevelSuccessScene } from "./scripts/scenes/level-success-scene.js";
 
             var mainMenuScene = new MainMenuScene();
             var musicScene = new MusicScene();
             var inventoryScene = new InventoryScene();
             var level1Scene = new Level1Scene();
             var gameOverScene = new GameOverScene();
+            var levelSuccessScene = new LevelSuccessScene();
 
             var config = {
                 type: Phaser.AUTO,
@@ -33,7 +35,7 @@
                         debug: false
                     }
                 },
-                scene: [ mainMenuScene, musicScene, inventoryScene, level1Scene, gameOverScene ]
+                scene: [ mainMenuScene, musicScene, inventoryScene, level1Scene, gameOverScene, levelSuccessScene ]
             };
 
             var game = new Phaser.Game(config);
