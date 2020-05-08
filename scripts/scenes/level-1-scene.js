@@ -113,10 +113,10 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('hallway', 'assets/rooms/hallway/hallway.png');
         this.load.image('dining_room', 'assets/rooms/dinning/dining_room_edited.png');
 
-        this.load.image('patrol_guard', 'assets/characters/npc/guard.png');
+        this.load.spritesheet('patrol_guard', 'assets/_old-test-sprites/Guard.png', { frameWidth: 32, frameHeight: 32 });
 
         this.load.spritesheet('celldoor', 'assets/room-objects/celldoor.png', { frameWidth: 76, frameHeight: 21 });
-        this.load.spritesheet('player', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet('player', 'assets/_old-test-sprites/NPC.png', { frameWidth: 32, frameHeight: 32 });
 
         this.load.image('key_silver', 'assets/items/key_silver.png');
         this.load.image('key_gold', 'assets/items/key_gold.png');
@@ -334,24 +334,66 @@ export class Level1Scene extends Phaser.Scene {
             frameRate: 20
         });
 
+        //guard animation
+        this.anims.create({
+            key: 'guard-left',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 4, end: 7 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        this.anims.create({
+            key: 'guard-down',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 0, end: 3 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        this.anims.create({
+            key: 'guard-turn',
+            frames: [ { key: 'patrol_guard', frame: 0 } ],
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'guard-right',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 8, end: 11 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'guard-up',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 9, end: 11 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        
+        //player animation
         this.anims.create({
             key: 'player-left',
-            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
+            frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+            frameRate: 5,
+            repeat: 5
         });
-
+        this.anims.create({
+            key: 'player-down',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+            frameRate: 5,
+            repeat: 5
+        });
         this.anims.create({
             key: 'player-turn',
-            frames: [{ key: 'player', frame: 4 }],
-            frameRate: 20
+            frames: [ { key: 'player', frame: 0 } ],
+            frameRate: 5
         });
-
         this.anims.create({
             key: 'player-right',
-            frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
             frameRate: 10,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'player-up',
+            frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
+            frameRate: 5,
+            repeat: 5
         });
 
         this.anims.create({
