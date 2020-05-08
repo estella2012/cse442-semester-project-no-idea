@@ -83,30 +83,24 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
 }
 
 export class Bomb extends Phaser.GameObjects.Sprite {
-    constructor(x, y, scene, player, text) {
+    constructor(x, y, scene) {
         super(scene, x, y);
         this.size = 'sm';
+        this.booms = true;
         this.identifier = 'bomb';
         this.requiredItem = 'matches';
-        this.setTexture('bominv');
-        this.player = player;
-        this.text = text;
-    }
+        this.setTexture('bom');	
+		this.textt=true;
+	
+	}
+	opent(){
+		
+	}
 
     boom() {
+        this.booms = false;
         this.anims.play('bm', true);
         this.body.checkCollision.none = true;
-    }
-
-    destroyWall() {
-        this.boom();
-        this.setDepth(this.depth + 1);
-        this.bWall = this.scene.add.breakableWall(this.x, this.y + 12);
-        this.bWall.setDepth(this.depth - 1);
-        this.text.text = 'Press SPACE at the broken wall\nto complete the level';
-
-        this.scene.physics.add.existing(this.bWall, 1);
-        this.scene.physics.add.overlap(this.bWall, this.player, this.bWall.checkSuccess, undefined, this.bWall);
     }
 }
 
@@ -125,7 +119,12 @@ export class GoldKey extends Phaser.GameObjects.Sprite {
         this.size = 'sm';
         this.identifier = 'gold_key';
         this.setTexture('key_gold');
+		this.textt=true;
+		
     }
+	opent(){
+		this.textt=false;
+	}
 }
 
 export class SilverKey extends Phaser.GameObjects.Sprite {
@@ -134,7 +133,14 @@ export class SilverKey extends Phaser.GameObjects.Sprite {
         this.size = 'sm';
         this.identifier = 'silver_key';
         this.setTexture('key_silver');
+		this.textt=true;
+		
     }
+	opent(){
+		this.textt=false;
+	}
+
+
 }
 
 export class Door extends Phaser.GameObjects.Sprite {
@@ -145,6 +151,12 @@ export class Door extends Phaser.GameObjects.Sprite {
         this.setTexture(image);
         this.setPosition(x, y);
     }
+/*
+    open() {
+        this.closed = false;
+        this.anims.play('door_open', true);               
+        this.body.checkCollision.none = true;
+    }*/
 }
 
 export class CellDoor extends Phaser.GameObjects.Sprite {
@@ -159,6 +171,7 @@ export class CellDoor extends Phaser.GameObjects.Sprite {
         this.closed = false;
         this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
+        
     }
 }
 
@@ -174,23 +187,5 @@ export class CellDoor2 extends Phaser.GameObjects.Sprite {
         this.closed = false;
         this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
-    }
-}
-
-export class BreakableWall extends Phaser.GameObjects.Sprite {
-    constructor(x, y, scene) {
-        super(scene, x, y);
-        this.setTexture('wall_broken');
-        this.sp = this.scene.input.keyboard.addKey('SPACE');
-    }
-
-    checkSuccess(wall, player) {
-        if (this.sp.isDown) {
-            player.setTint(0xff0000);
-            player.anims.play('player-turn');
-            this.scene.scene.pause('Level1Scene');
-            this.scene.scene.stop('InventoryScene');
-            this.scene.scene.launch('LevelSuccessScene');
-        }
     }
 }
