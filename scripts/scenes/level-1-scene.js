@@ -47,8 +47,8 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
-        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y, player) {
-            var sprite = new Bomb(x, y, this.scene, player);
+        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y, player, text) {
+            var sprite = new Bomb(x, y, this.scene, player, text);
             this.displayList.add(sprite);
             this.updateList.add(sprite);
             return sprite;
@@ -113,15 +113,16 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('hallway', 'assets/rooms/hallway/hallway.png');
         this.load.image('dining_room', 'assets/rooms/dinning/dining_room_edited.png');
 
-        this.load.image('patrol_guard', 'assets/characters/npc/guard.png');
+        this.load.spritesheet('patrol_guard', 'assets/_old-test-sprites/Guard.png', { frameWidth: 32, frameHeight: 32 });
 
         this.load.spritesheet('celldoor', 'assets/room-objects/celldoor.png', { frameWidth: 76, frameHeight: 21 });
-        this.load.spritesheet('player', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet('player', 'assets/_old-test-sprites/NPC.png', { frameWidth: 32, frameHeight: 32 });
 
         this.load.image('key_silver', 'assets/items/key_silver.png');
         this.load.image('key_gold', 'assets/items/key_gold.png');
         this.load.image('bomb', 'assets/items/bomb.png');
-        this.load.image('bed', 'assets/room-objects/bed.png');
+        this.load.image('cover', 'assets/room-objects/bed.png');
+        this.load.image('bed', 'assets/room-objects/beizi.png');
         this.load.image('table', 'assets/room-objects/table_wood.png');
         this.load.image('lamp', 'assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
@@ -194,7 +195,7 @@ export class Level1Scene extends Phaser.Scene {
         var dleft = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'left', dr, 'dleft'), 1);
         var drightb = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'rightb', dr, 'drightb'), 1);
         var drightt = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'rightt', dr, 'drightt'), 1);
-        var dtopl = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'topl', dr, 'dtopl'), 1);
+        var dtopl = this.physics.add.existing(this.add.dwall(dr.x - 4, dr.y, 'topl', dr, 'dtopl'), 1);
         var dtopr = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'topr', dr, 'dtopr'), 1);
         var dbt = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'bt', dr, 'dbt'), 1);
         
@@ -209,20 +210,25 @@ export class Level1Scene extends Phaser.Scene {
         //dialog
 	    var textn = 0;
 		var text = this.add.text(120,550 , 'Press \'I\' to view the backpack,\npress \'A\' to view the latest picked item information.', { font: '18px Courier', fill: '#000000' });
-		text.setScrollFactor(0);
+        text.setScrollFactor(0);
+        this.t = text;
 
-        this.add.bed(446, 262, text);
+        var bed = this.add.sprite(446, 262, 'cover');
         this.add.woodTable(397, 250, text);
         this.add.lamp(380, 235, text);
         this.add.halfPicture(420, 240, text);
 
         var player = this.physics.add.existing(this.add.player(400, 300));
+        this.add.bed(446, 262, text);
 
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
-		 
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
-        var bomb = this.physics.add.existing(this.add.bomb(200, 224, player), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(200, 224, player, text), 1);
+
+        this.silvK = sk;
+        this.goldK = gk;
+        this.match = mat;
 
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
         var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
@@ -285,72 +291,26 @@ export class Level1Scene extends Phaser.Scene {
 		var npc = this.add.sprite(450,310,'NPC');
 	    npc.setInteractive();
         
-        // Dialog check items
-	    this.input.keyboard.on('keydown-A', function (event) {
-	        if(gk.textt==true && sk.textt==true && mat.textt==true){
-			  text.text='Did\'t have any new item is picked';
-            }
-            
-	        if(gk.textt==false && sk.textt==true && mat.textt== true){
-				text.text='You get a gold key.';
-				gk.textt=true;
-			}else if(mat.textt==false && gk.textt==true && sk.textt==true){
-				text.text='You get a matches.';
-				mat.textt=true;
-			}
-      
-            if(sk.textt==false && mat.textt==true && gk.textt==true){
-		        text.text='You get a silver key.';
-				sk.textt=true;
-            }
-            
-			if(mat.textt==false && gk.textt==true && sk.textt==false){
-				text.text='You get a silver key and matches.';
-				sk.textt=true;
-				mat.textt=true;
-            }
-            
-		    if(mat.textt==false && gk.textt==false && sk.textt==false){
-				text.text='You get a silver key, gold key and matches.';
-				sk.textt=true;
-				mat.textt=true;
-				gk.textt=true;
-			}
-		
-			if(mat.textt==false && gk.textt==false && sk.textt==true){
-				text.text='You get a gold key and matches.';
-				mat.textt=true;
-				gk.textt=true;
-			}
-
-			if(mat.textt==true && gk.textt==false && sk.textt==false){
-				text.text='You get a gold key and silver key.';
-				sk.textt=true;
-				gk.textt=true;
-			}
-			//if(bomb.textt==true && mat.textt==true && gk.textt==true&& sk.textt=true){
-			//	text.text='   ';
-			//}
-        });
-		
+        // Setup for dialog inventory key
+        this.aKey = this.input.keyboard.addKey('A');
 		
         npc.on('pointerdown', function () {
 		  //this.inventoryScene.usebook('half_picture', textn);
 	        if(textn == 0){
 		        //this.graphics.visible=this.visible;
-		        text.text ='Prisoner C:How can I get Crane\'s things back?';
+		        text.text='Cell-Mate: \"How can I get Crane\'s things back?\"';
 		        textn++;
 		    }else if(textn==1){
-		  	    text.text=' Prisoner C:I just want to bring back his stuff,\n why there is no one to help us. ';
+		  	    text.text='Cell-Mate: \"I just want to bring back his stuff,\n why there is no one to help us.\"';
 			    textn++;
 		    }else if(textn==2){
 		  	    textn++;
-				text.text='Player: !!!!!!!!!!!!!!';
+				text.text='Me: ! \"Maybe I can help...\"';
 		    }else if(textn==3){
-			  	text.text=' But who can get these stuffs beside the guard? ';
+			  	text.text='[But who can get these stuffs beside the guard?]';
 				textn++;
 			}else if(textn==4){
-			  	text.text='No one can go to others cell except for the guard. ';
+			  	text.text='[No one can go to others cell except for the guard.]\n[Hey that looks like a key!]';
 				textn++;
 			}else{
 		 	    text.text=' ';
@@ -360,15 +320,6 @@ export class Level1Scene extends Phaser.Scene {
         //camera
         this.cameras.main.startFollow(player);
     }
-
-
-	collectitem (player, sk){
-        if(sk.textt==false){
-			text.text='You get a silver key.';
-			sk.textt=true;
-	    }
-    }
-
 
     createAnims() {
         this.anims.create({
@@ -383,32 +334,99 @@ export class Level1Scene extends Phaser.Scene {
             frameRate: 20
         });
 
+        //guard animation
+        this.anims.create({
+            key: 'guard-left',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 4, end: 7 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        this.anims.create({
+            key: 'guard-down',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 0, end: 3 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        this.anims.create({
+            key: 'guard-turn',
+            frames: [ { key: 'patrol_guard', frame: 0 } ],
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'guard-right',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 8, end: 11 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'guard-up',
+            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 9, end: 11 }),
+            frameRate: 5,
+            repeat: 5
+        });
+        
+        //player animation
         this.anims.create({
             key: 'player-left',
-            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
+            frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
+            frameRate: 5,
+            repeat: 5
         });
-
+        this.anims.create({
+            key: 'player-down',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+            frameRate: 5,
+            repeat: 5
+        });
         this.anims.create({
             key: 'player-turn',
-            frames: [{ key: 'player', frame: 4 }],
-            frameRate: 20
+            frames: [ { key: 'player', frame: 0 } ],
+            frameRate: 5
         });
-
         this.anims.create({
             key: 'player-right',
-            frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
             frameRate: 10,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'player-up',
+            frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
+            frameRate: 5,
+            repeat: 5
         });
 
         this.anims.create({
             key: 'bm',
             frames: this.anims.generateFrameNumbers('bominv', { start: 0, end: 9 }),
             frameRate: 18,
-
             repeat: 0
         });
+    }
+
+    update() {
+        if (this.aKey.isDown) {
+            var gkv = this.inventoryScene.inventory.getItem("gold_key");
+            var skv = this.inventoryScene.inventory.getItem("silver_key");
+            var mat = this.inventoryScene.inventory.getItem("matches");
+
+	        if(!gkv && !mat && !skv){
+			    this.t.text='Did\'t have any new item is picked';
+            }else if(gkv && !mat && !skv){
+				this.t.text='You have a gold key.';
+			}else if(!gkv && mat && !skv){
+				this.t.text='You have matches.';
+			}else if(!gkv && !mat && skv){
+		        this.t.text='You have a silver key.';
+            }else if(!gkv && mat && skv){
+				this.t.text='You have a silver key and matches.';
+            }else if(gkv && mat && !skv){
+				this.t.text='You have a gold key and matches.';
+			}else if(gkv && !mat && skv){
+				this.t.text='You have a gold key and silver key.';
+			}else if(gkv && mat && skv){
+				this.t.text='You have a silver key, gold key and matches.';
+			}
+        }
     }
 }

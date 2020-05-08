@@ -1,6 +1,7 @@
 export class MainMenuScene extends Phaser.Scene {
     constructor() {
         super('MainMenuScene');
+        this.firstTime = true;
     }
 
     preload() {
@@ -23,6 +24,11 @@ export class MainMenuScene extends Phaser.Scene {
             }
         }
         this.sound.play('theme');
+
+        if (this.firstTime) {
+            this.sound.volume = 0.5;
+            this.firstTime = false;
+        }
 
         this.add.image(400, 300, 'sky');
 
