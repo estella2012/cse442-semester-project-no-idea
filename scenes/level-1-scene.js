@@ -6,7 +6,7 @@ import { CWall, DWall, HWall } from "../game-objects/wall.js";
 export class Level1Scene extends Phaser.Scene {
     constructor() {
         super('Level1Scene');
-		var text1;
+		var text;
     }
 
     init() {
@@ -307,9 +307,9 @@ export class Level1Scene extends Phaser.Scene {
 		//dialog
 
 	    var textn = 0;
-		var text1 = this.add.text(120,550 , 'begin ', { font: '18px Courier', fill: '#000000' });
+		var text = this.add.text(120,550 , 'begin ', { font: '18px Courier', fill: '#000000' });
 		
-		text1.setScrollFactor(0);
+		text.setScrollFactor(0);
 		
 		
 		
@@ -318,7 +318,7 @@ export class Level1Scene extends Phaser.Scene {
 	        
       
             if(sk.textt==false){
-			   text1.text='You get a silver key.';
+			   text.text='You get a silver key.';
 	       }
            }, this);
 		
@@ -328,31 +328,31 @@ export class Level1Scene extends Phaser.Scene {
 	      if(textn == 0){
 		       
 		      //this.graphics.visible=this.visible;
-		       text1.text ='Prisoner C:How can I get Crane\'s things back?';
+		       text.text ='Prisoner C:How can I get Crane\'s things back?';
 		       textn++;
 		  }
 		  
 		  else if(textn==1){
-		  	  text1.text=' Prisoner C:I just want to bring back his stuff,\n why there is no one to help us. ';
+		  	  text.text=' Prisoner C:I just want to bring back his stuff,\n why there is no one to help us. ';
 			  textn++;
 		  }
 		  else if(textn==2){
 		  	
 		  	       textn++;
-				   text1.text='Player: !!!!!!!!!!!!!!';
+				   text.text='Player: !!!!!!!!!!!!!!';
 				 
 			
 		  }
 		 else  if(textn==3){
-			  	  text1.text=' But who can get these stuffs beside the guard? ';
+			  	  text.text=' But who can get these stuffs beside the guard? ';
 				  textn++;
 			  }
 	     else if(textn==4){
-			  	  text1.text='No one can go to others cell except for the guard. ';
+			  	  text.text='No one can go to others cell except for the guard. ';
 				  textn++;
 			  }
 	     else if(textn==5 &&sk.textt==false){
-		 	 text1.text='good';
+		 	 text.text='good';
 		 }
 		  
 		  
@@ -412,8 +412,6 @@ export class Level1Scene extends Phaser.Scene {
     }
 
 	changetext(player,item){
-	       text1.text='end';
+	       text.text='end';
 	}
-	
-	
 }

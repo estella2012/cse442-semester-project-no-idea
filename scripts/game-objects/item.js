@@ -189,8 +189,6 @@ export class BreakableWall extends Phaser.GameObjects.Sprite {
     }
 
     checkSuccess(wall, player) {
-        console.log("Collision");
-
         if (this.sp.isDown) {
             player.setTint(0xff0000);
             player.anims.play('player-turn');
