@@ -83,13 +83,14 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
 }
 
 export class Bomb extends Phaser.GameObjects.Sprite {
-    constructor(x, y, scene, player) {
+    constructor(x, y, scene, player, text) {
         super(scene, x, y);
         this.size = 'sm';
         this.identifier = 'bomb';
         this.requiredItem = 'matches';
         this.setTexture('bominv');
         this.player = player;
+        this.text = text;
     }
 
     boom() {
@@ -102,6 +103,7 @@ export class Bomb extends Phaser.GameObjects.Sprite {
         this.setDepth(this.depth + 1);
         this.bWall = this.scene.add.breakableWall(this.x, this.y + 12);
         this.bWall.setDepth(this.depth - 1);
+        this.text.text = 'Press SPACE at the broken wall\nto complete the level';
 
         this.scene.physics.add.existing(this.bWall, 1);
         this.scene.physics.add.overlap(this.bWall, this.player, this.bWall.checkSuccess, undefined, this.bWall);
@@ -143,12 +145,6 @@ export class Door extends Phaser.GameObjects.Sprite {
         this.setTexture(image);
         this.setPosition(x, y);
     }
-/*
-    open() {
-        this.closed = false;
-        this.anims.play('door_open', true);               
-        this.body.checkCollision.none = true;
-    }*/
 }
 
 export class CellDoor extends Phaser.GameObjects.Sprite {
