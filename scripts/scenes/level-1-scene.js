@@ -1,6 +1,6 @@
 import { Player } from "../game-objects/player.js";
 import { PatrolGuard } from "../game-objects/patrol_guard.js";
-import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches } from "../game-objects/item.js";
+import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches, BreakableWall } from "../game-objects/item.js";
 import { CWall, DWall, HWall } from "../game-objects/wall.js";
 
 export class Level1Scene extends Phaser.Scene {
@@ -47,8 +47,8 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
-        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y) {
-            var sprite = new Bomb(x, y, this.scene);
+        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y, player) {
+            var sprite = new Bomb(x, y, this.scene, player);
             this.displayList.add(sprite);
             this.updateList.add(sprite);
             return sprite;
@@ -98,6 +98,11 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
+        Phaser.GameObjects.GameObjectFactory.register('breakableWall', function (x, y) {
+            var sprite = new BreakableWall(x, y, this.scene);
+            this.displayList.add(sprite);
+            return sprite;
+        });
     }
 
     preload() {
@@ -127,6 +132,7 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('ctop', 'assets/rooms/cell/ctop.png');
         this.load.image('cll', 'assets/rooms/cell/cll.png');
         this.load.image('clr', 'assets/rooms/cell/clr.png');
+        this.load.image('wall_broken', 'assets/rooms/cell/wallhole.png');
 
         this.load.image('dleft', 'assets/rooms/dinning/dining_room_left.png');
         this.load.image('drightb', 'assets/rooms/dinning/dining_room_right_bt.png');
@@ -144,41 +150,18 @@ export class Level1Scene extends Phaser.Scene {
 
         this.load.image('matches_img', 'assets/items/matches.png');
         this.load.spritesheet('bom', 'assets/items/boom.png', { frameWidth: 60, frameHeight: 60 });
+        this.load.spritesheet('bominv', 'assets/items/boom_to_invisible.png', { frameWidth: 60, frameHeight: 60 });
 		this.load.image('NPC','assets/characters/npc/character_m_vip.png');
-       
     }
 
     create() {
         this.createAnims();
 
-
         var hallway = this.add.image(528, 412, 'hallway');
-
         var cell1 = this.add.image(208, 300, 'cell');
         var cell2 = this.add.image(400, 300, 'cell');
         var cell3 = this.add.image(592, 300, 'cell');
         var dr = this.add.image(528, 684, 'dining_room');
-
-        var config = {
-            key: 'booom',
-            frames: this.anims.generateFrameNumbers('bom'),
-            frameRate: 18,
-            repeat: 0
-        };
-
-        var anim = this.anims.create(config);
-        var sprite = this.add.sprite(400, 300, 'bom');
-        sprite.setInteractive();
-        sprite.setDataEnabled();
-        sprite.data.set('time', 0);
-
-        sprite.anims.load('booom');
-        this.input.keyboard.on('keydown_SPACE', function (event) {
-            sprite.data.values.time++;
-            if (sprite.data.values.time <= 1) {
-                sprite.anims.play('booom');
-            }
-        });
 
         /*
          * Wall objects
@@ -229,7 +212,7 @@ export class Level1Scene extends Phaser.Scene {
 		 
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
-        var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(200, 224, player), 1);
 
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
         var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
@@ -453,7 +436,7 @@ export class Level1Scene extends Phaser.Scene {
 
         this.anims.create({
             key: 'bm',
-            frames: this.anims.generateFrameNumbers('bom', { start: 0, end: 9 }),
+            frames: this.anims.generateFrameNumbers('bominv', { start: 0, end: 9 }),
             frameRate: 18,
 
             repeat: 0

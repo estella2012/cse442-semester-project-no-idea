@@ -83,19 +83,28 @@ export class WoodTable extends Phaser.GameObjects.Sprite {
 }
 
 export class Bomb extends Phaser.GameObjects.Sprite {
-    constructor(x, y, scene) {
+    constructor(x, y, scene, player) {
         super(scene, x, y);
         this.size = 'sm';
-        this.booms = true;
         this.identifier = 'bomb';
         this.requiredItem = 'matches';
-        this.setTexture('bom');
+        this.setTexture('bominv');
+        this.player = player;
     }
 
     boom() {
-        this.booms = false;
         this.anims.play('bm', true);
         this.body.checkCollision.none = true;
+    }
+
+    destroyWall() {
+        this.boom();
+        this.setDepth(this.depth + 1);
+        this.bWall = this.scene.add.breakableWall(this.x, this.y + 12);
+        this.bWall.setDepth(this.depth - 1);
+
+        this.scene.physics.add.existing(this.bWall, 1);
+        this.scene.physics.add.overlap(this.bWall, this.player, this.bWall.checkSuccess, undefined, this.bWall);
     }
 }
 
@@ -154,7 +163,6 @@ export class CellDoor extends Phaser.GameObjects.Sprite {
         this.closed = false;
         this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
-        
     }
 }
 
@@ -170,5 +178,25 @@ export class CellDoor2 extends Phaser.GameObjects.Sprite {
         this.closed = false;
         this.anims.play('celldoor_open', true);
         this.body.checkCollision.none = true;
+    }
+}
+
+export class BreakableWall extends Phaser.GameObjects.Sprite {
+    constructor(x, y, scene) {
+        super(scene, x, y);
+        this.setTexture('wall_broken');
+        this.sp = this.scene.input.keyboard.addKey('SPACE');
+    }
+
+    checkSuccess(wall, player) {
+        console.log("Collision");
+
+        if (this.sp.isDown) {
+            player.setTint(0xff0000);
+            player.anims.play('player-turn');
+            this.scene.scene.pause('Level1Scene');
+            this.scene.scene.stop('InventoryScene');
+            this.scene.scene.launch('LevelSuccessScene');
+        }
     }
 }
