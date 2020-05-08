@@ -1,6 +1,6 @@
 import { Player } from "../game-objects/player.js";
 import { PatrolGuard } from "../game-objects/patrol_guard.js";
-import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches, BreakableWall } from "../game-objects/item.js";
+import { WoodTable, Lamp, HalfPicture, Bed, Bomb, GoldKey, SilverKey, Door, CellDoor, CellDoor2, Matches } from "../game-objects/item.js";
 import { CWall, DWall, HWall } from "../game-objects/wall.js";
 
 export class Level1Scene extends Phaser.Scene {
@@ -47,8 +47,8 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
-        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y, player, text) {
-            var sprite = new Bomb(x, y, this.scene, player, text);
+        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y) {
+            var sprite = new Bomb(x, y, this.scene);
             this.displayList.add(sprite);
             this.updateList.add(sprite);
             return sprite;
@@ -98,11 +98,6 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
-        Phaser.GameObjects.GameObjectFactory.register('breakableWall', function (x, y) {
-            var sprite = new BreakableWall(x, y, this.scene);
-            this.displayList.add(sprite);
-            return sprite;
-        });
     }
 
     preload() {
@@ -113,29 +108,25 @@ export class Level1Scene extends Phaser.Scene {
         this.load.image('hallway', 'assets/rooms/hallway/hallway.png');
         this.load.image('dining_room', 'assets/rooms/dinning/dining_room_edited.png');
 
-        this.load.spritesheet('patrol_guard', 'assets/_old-test-sprites/Guard.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.image('patrol_guard', 'assets/characters/npc/guard.png');
 
         this.load.spritesheet('celldoor', 'assets/room-objects/celldoor.png', { frameWidth: 76, frameHeight: 21 });
-        this.load.spritesheet('player', 'assets/_old-test-sprites/NPC.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('player', 'assets/characters/testing/dude.png', { frameWidth: 32, frameHeight: 48 });
 
         this.load.image('key_silver', 'assets/items/key_silver.png');
         this.load.image('key_gold', 'assets/items/key_gold.png');
         this.load.image('bomb', 'assets/items/bomb.png');
-        this.load.image('cover', 'assets/room-objects/bed.png');
-        this.load.image('bed', 'assets/room-objects/beizi.png');
+        this.load.image('bed', 'assets/room-objects/bed.png');
         this.load.image('table', 'assets/room-objects/table_wood.png');
         this.load.image('lamp', 'assets/room-objects/lamp.png');
         this.load.image('half_picture', 'assets/room-objects/half_photo.png');
         this.load.image('map', 'assets/rooms/whole_map.png');
-		this.load.image('l_table', 'assets/room-objects/table_wood_short.png');
-		this.load.image('iron_table', 'assets/room-objects/table_iron.png');
 
         this.load.image('cleft', 'assets/rooms/cell/cleft.png');
         this.load.image('cright', 'assets/rooms/cell/cright.png');
         this.load.image('ctop', 'assets/rooms/cell/ctop.png');
         this.load.image('cll', 'assets/rooms/cell/cll.png');
         this.load.image('clr', 'assets/rooms/cell/clr.png');
-        this.load.image('wall_broken', 'assets/rooms/cell/wallhole.png');
 
         this.load.image('dleft', 'assets/rooms/dinning/dining_room_left.png');
         this.load.image('drightb', 'assets/rooms/dinning/dining_room_right_bt.png');
@@ -153,18 +144,41 @@ export class Level1Scene extends Phaser.Scene {
 
         this.load.image('matches_img', 'assets/items/matches.png');
         this.load.spritesheet('bom', 'assets/items/boom.png', { frameWidth: 60, frameHeight: 60 });
-        this.load.spritesheet('bominv', 'assets/items/boom_to_invisible.png', { frameWidth: 60, frameHeight: 60 });
 		this.load.image('NPC','assets/characters/npc/character_m_vip.png');
+       
     }
 
     create() {
         this.createAnims();
 
+
         var hallway = this.add.image(528, 412, 'hallway');
+
         var cell1 = this.add.image(208, 300, 'cell');
         var cell2 = this.add.image(400, 300, 'cell');
         var cell3 = this.add.image(592, 300, 'cell');
         var dr = this.add.image(528, 684, 'dining_room');
+
+        var config = {
+            key: 'booom',
+            frames: this.anims.generateFrameNumbers('bom'),
+            frameRate: 18,
+            repeat: 0
+        };
+
+        var anim = this.anims.create(config);
+        var sprite = this.add.sprite(400, 300, 'bom');
+        sprite.setInteractive();
+        sprite.setDataEnabled();
+        sprite.data.set('time', 0);
+
+        sprite.anims.load('booom');
+        this.input.keyboard.on('keydown_SPACE', function (event) {
+            sprite.data.values.time++;
+            if (sprite.data.values.time <= 1) {
+                sprite.anims.play('booom');
+            }
+        });
 
         /*
          * Wall objects
@@ -201,53 +215,21 @@ export class Level1Scene extends Phaser.Scene {
         var dtopr = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'topr', dr, 'dtopr'), 1);
         var dbt = this.physics.add.existing(this.add.dwall(dr.x, dr.y, 'bt', dr, 'dbt'), 1);
 
-		//dinner_tables
-		var table_group = this.physics.add.staticGroup();
-
-		for(var i = 0; i < 4; i++){
-			table_group.create(388 + 75*i, dr.y - 115, 'l_table');
-		}
-		for(var i = 0; i < 4; i++){
-			table_group.create(388 + 75*i, dr.y + 115, 'l_table');
-		}
-
-		var iron_group = this.physics.add.staticGroup();
-
-		for(var i = -1; i < 2; i+= 2){
-			iron_group.create(dr.x + 180, dr.y - 30 + 70*i, 'iron_table');
-		}
-
-        
-        //dialog box	
-	    this.graphics = this.add.graphics();
-		this.graphics.lineStyle(1, 0xffffff);
-        this.graphics.fillStyle(0xffffff, 0.6); 
-		this.graphics.strokeRect(110, 530, 685, 70);
-		this.graphics.fillRect(110, 530, 685, 70);
-	    this.graphics.setScrollFactor(0);
-
-        //dialog
-	    var textn = 0;
-		var text = this.add.text(120,550 , 'Press \'I\' to view the backpack,\npress \'A\' to view the latest picked item information.', { font: '18px Courier', fill: '#000000' });
+        var text = this.add.text(20, 450, 'This is my room', { font: '12px Courier', fill: '#00ff00' });
         text.setScrollFactor(0);
-        this.t = text;
 
-        var bed = this.add.sprite(446, 262, 'cover');
+        this.add.bed(446, 262, text);
         this.add.woodTable(397, 250, text);
         this.add.lamp(380, 235, text);
         this.add.halfPicture(420, 240, text);
 
         var player = this.physics.add.existing(this.add.player(400, 300));
-        this.add.bed(446, 262, text);
 
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
+		 
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
-        var bomb = this.physics.add.existing(this.add.bomb(200, 224, player, text), 1);
-
-        this.silvK = sk;
-        this.goldK = gk;
-        this.match = mat;
+        var bomb = this.physics.add.existing(this.add.bomb(150, 320), 1);
 
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
         var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
@@ -261,6 +243,7 @@ export class Level1Scene extends Phaser.Scene {
          * Colliders
          */
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
+		this.physics.add.collider(player, sk, this.changetext, undefined, this.inventoryScene);
 		
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
@@ -309,39 +292,82 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, dbt);
 		var npc = this.add.sprite(450,310,'NPC');
 	    npc.setInteractive();
-        
-        // Setup for dialog inventory key
-        this.aKey = this.input.keyboard.addKey('A');
+		
+	    this.graphics = this.add.graphics();
+		this.graphics.lineStyle(1, 0xffffff);
+        this.graphics.fillStyle(0xffffff, 0.5); 
+		this.graphics.strokeRect(110, 530, 685, 70);
+		this.graphics.fillRect(110, 530, 685, 70);
+//		this.visible=!this.visible;
+//		this.graphics.visible = !this.visible;
+	    this.graphics.setScrollFactor(0);
+
+		
+
+		//dialog
+
+	    var textn = 0;
+		var text = this.add.text(120,550 , 'begin ', { font: '18px Courier', fill: '#000000' });
+		
+		text.setScrollFactor(0);
+		
+		
+		
+	
+	 this.input.keyboard.on('keydown-A', function () {
+	        
+      
+            if(sk.textt==false){
+			   text.text='You get a silver key.';
+	       }
+           }, this);
+		
 		
         npc.on('pointerdown', function () {
 		  //this.inventoryScene.usebook('half_picture', textn);
-	        if(textn == 0){
-		        //this.graphics.visible=this.visible;
-		        text.text='Cell-Mate: \"How can I get Crane\'s things back?\"';
-		        textn++;
-		    }else if(textn==1){
-		  	    text.text='Cell-Mate: \"I just want to bring back his stuff,\n why there is no one to help us.\"';
-			    textn++;
-		    }else if(textn==2){
-		  	    textn++;
-				text.text='Me: ! \"Maybe I can help...\"';
-		    }else if(textn==3){
-			  	text.text='[But who can get these stuffs beside the guard?]';
-				textn++;
-			}else if(textn==4){
-			  	text.text='[No one can go to others cell except for the guard.]\n[Hey that looks like a key!]';
-				textn++;
-			}else{
-		 	    text.text=' ';
-		    }
+	      if(textn == 0){
+		       
+		      //this.graphics.visible=this.visible;
+		       text.text ='Prisoner C:How can I get Crane\'s things back?';
+		       textn++;
+		  }
+		  
+		  else if(textn==1){
+		  	  text.text=' Prisoner C:I just want to bring back his stuff,\n why there is no one to help us. ';
+			  textn++;
+		  }
+		  else if(textn==2){
+		  	
+		  	       textn++;
+				   text.text='Player: !!!!!!!!!!!!!!';
+				 
+			
+		  }
+		 else  if(textn==3){
+			  	  text.text=' But who can get these stuffs beside the guard? ';
+				  textn++;
+			  }
+	     else if(textn==4){
+			  	  text.text='No one can go to others cell except for the guard. ';
+				  textn++;
+			  }
+	     else if(textn==5 &&sk.textt==false){
+		 	 text.text='good';
+		 }
+		  
+		  
+	         
+	  
+	      
 	    });
 
-		this.physics.add.collider(player, table_group);
-		this.physics.add.collider(player, iron_group);
 
         //camera
         this.cameras.main.startFollow(player);
+
     }
+
+
 
     createAnims() {
         this.anims.create({
@@ -356,99 +382,36 @@ export class Level1Scene extends Phaser.Scene {
             frameRate: 20
         });
 
-        //guard animation
-        this.anims.create({
-            key: 'guard-left',
-            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 4, end: 7 }),
-            frameRate: 5,
-            repeat: 5
-        });
-        this.anims.create({
-            key: 'guard-down',
-            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 0, end: 3 }),
-            frameRate: 5,
-            repeat: 5
-        });
-        this.anims.create({
-            key: 'guard-turn',
-            frames: [ { key: 'patrol_guard', frame: 0 } ],
-            frameRate: 5
-        });
-        this.anims.create({
-            key: 'guard-right',
-            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 8, end: 11 }),
-            frameRate: 10,
-            repeat: -1
-        });
-        this.anims.create({
-            key: 'guard-up',
-            frames: this.anims.generateFrameNumbers('patrol_guard', { start: 9, end: 11 }),
-            frameRate: 5,
-            repeat: 5
-        });
-        
-        //player animation
         this.anims.create({
             key: 'player-left',
-            frames: this.anims.generateFrameNumbers('player', { start: 4, end: 7 }),
-            frameRate: 5,
-            repeat: 5
-        });
-        this.anims.create({
-            key: 'player-down',
             frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
-            frameRate: 5,
-            repeat: 5
-        });
-        this.anims.create({
-            key: 'player-turn',
-            frames: [ { key: 'player', frame: 0 } ],
-            frameRate: 5
-        });
-        this.anims.create({
-            key: 'player-right',
-            frames: this.anims.generateFrameNumbers('player', { start: 8, end: 11 }),
             frameRate: 10,
             repeat: -1
         });
+
         this.anims.create({
-            key: 'player-up',
-            frames: this.anims.generateFrameNumbers('player', { start: 12, end: 15 }),
-            frameRate: 5,
-            repeat: 5
+            key: 'player-turn',
+            frames: [{ key: 'player', frame: 4 }],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'player-right',
+            frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
+            frameRate: 10,
+            repeat: -1
         });
 
         this.anims.create({
             key: 'bm',
-            frames: this.anims.generateFrameNumbers('bominv', { start: 0, end: 9 }),
+            frames: this.anims.generateFrameNumbers('bom', { start: 0, end: 9 }),
             frameRate: 18,
+
             repeat: 0
         });
     }
 
-    update() {
-        if (this.aKey.isDown) {
-            var gkv = this.inventoryScene.inventory.getItem("gold_key");
-            var skv = this.inventoryScene.inventory.getItem("silver_key");
-            var mat = this.inventoryScene.inventory.getItem("matches");
-
-	        if(!gkv && !mat && !skv){
-			    this.t.text='Did\'t have any new item is picked';
-            }else if(gkv && !mat && !skv){
-				this.t.text='You have a gold key.';
-			}else if(!gkv && mat && !skv){
-				this.t.text='You have matches.';
-			}else if(!gkv && !mat && skv){
-		        this.t.text='You have a silver key.';
-            }else if(!gkv && mat && skv){
-				this.t.text='You have a silver key and matches.';
-            }else if(gkv && mat && !skv){
-				this.t.text='You have a gold key and matches.';
-			}else if(gkv && !mat && skv){
-				this.t.text='You have a gold key and silver key.';
-			}else if(gkv && mat && skv){
-				this.t.text='You have a silver key, gold key and matches.';
-			}
-        }
-    }
+	changetext(player,item){
+	       text.text='end';
+	}
 }

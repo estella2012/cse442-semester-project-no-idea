@@ -25,4 +25,20 @@ export class PatrolGuard extends Phaser.GameObjects.PathFollower {
         this.scene.stop('InventoryScene');
         this.scene.launch('GameOverScene');
     }
+
+    preUpdate(time, delta){
+        super.preUpdate(time, delta);
+
+        var Clamp = Phaser.Math.Clamp;
+        var t = this.pathTween.getValue();
+        var p1 = this.path.getPoint(Clamp(t - 1e-6, 0, 1));
+        var p2 = this.path.getPoint(Clamp(t + 1e-6, 0, 1));
+        var dir = p2.clone().subtract(p1);
+
+        if (dir.x > 0) this.anims.play("guard-right", true);
+        else if (dir.x < 0) this.anims.play("guard-left", true);
+        else if (dir.y > 0) this.anims.play("guard-down", true);
+        else if (dir.y < 0) this.anims.play("guard-up", true);
+        else this.anims.stop();
+    }
 }
