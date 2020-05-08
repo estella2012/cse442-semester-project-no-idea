@@ -46,8 +46,8 @@ export class Level1Scene extends Phaser.Scene {
             this.displayList.add(sprite);
             return sprite;
         });
-        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y) {
-            var sprite = new Bomb(x, y, this.scene);
+        Phaser.GameObjects.GameObjectFactory.register('bomb', function (x, y, player) {
+            var sprite = new Bomb(x, y, this.scene, player);
             this.displayList.add(sprite);
             this.updateList.add(sprite);
             return sprite;
@@ -149,39 +149,17 @@ export class Level1Scene extends Phaser.Scene {
 
         this.load.image('matches_img', 'assets/items/matches.png');
         this.load.spritesheet('bom', 'assets/items/boom.png', { frameWidth: 60, frameHeight: 60 });
+        this.load.spritesheet('bominv', 'assets/items/boom_to_invisible.png', { frameWidth: 60, frameHeight: 60 });
     }
 
     create() {
         this.createAnims();
 
-
         var hallway = this.add.image(528, 412, 'hallway');
-
         var cell1 = this.add.image(208, 300, 'cell');
         var cell2 = this.add.image(400, 300, 'cell');
         var cell3 = this.add.image(592, 300, 'cell');
         var dr = this.add.image(528, 684, 'dining_room');
-
-        var config = {
-            key: 'booom',
-            frames: this.anims.generateFrameNumbers('bom'),
-            frameRate: 18,
-            repeat: 0
-        };
-
-        var anim = this.anims.create(config);
-        var sprite = this.add.sprite(400, 300, 'bom');
-        sprite.setInteractive();
-        sprite.setDataEnabled();
-        sprite.data.set('time', 0);
-
-        sprite.anims.load('booom');
-        this.input.keyboard.on('keydown_SPACE', function (event) {
-            sprite.data.values.time++;
-            if (sprite.data.values.time <= 1) {
-                sprite.anims.play('booom');
-            }
-        });
 
         /*
          * Wall objects
@@ -231,7 +209,7 @@ export class Level1Scene extends Phaser.Scene {
         var sk = this.physics.add.existing(this.add.silverKey(350, 250), 1);
         var gk = this.physics.add.existing(this.add.goldKey(700, 860), 1);
         var mat = this.physics.add.existing(this.add.matches(350, 350), 1);
-        var bomb = this.physics.add.existing(this.add.bomb(200, 224), 1);
+        var bomb = this.physics.add.existing(this.add.bomb(200, 224, player), 1);
 
         var cDoor1 = this.physics.add.existing(this.add.cellDoor2(204, 385), 1);
         var cDoor2 = this.physics.add.existing(this.add.cellDoor(396, 385), 1);
@@ -247,7 +225,7 @@ export class Level1Scene extends Phaser.Scene {
         this.physics.add.collider(player, sk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, gk, this.inventoryScene.collect, undefined, this.inventoryScene);
         this.physics.add.collider(player, mat, this.inventoryScene.collect, undefined, this.inventoryScene);
-        this.physics.add.collider(player, bomb, bomb.boom, undefined, bomb);
+        this.physics.add.collider(player, bomb, this.inventoryScene.tryBoom, undefined, this.inventoryScene);
 
         //CellDoors
         this.physics.add.collider(player, cDoor1, this.inventoryScene.tryOpen, undefined, this.inventoryScene);
@@ -330,7 +308,7 @@ export class Level1Scene extends Phaser.Scene {
 
         this.anims.create({
             key: 'bm',
-            frames: this.anims.generateFrameNumbers('bom', { start: 0, end: 9 }),
+            frames: this.anims.generateFrameNumbers('bominv', { start: 0, end: 9 }),
             frameRate: 18,
 
             repeat: 0
